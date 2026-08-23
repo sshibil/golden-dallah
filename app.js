@@ -1,4 +1,4 @@
-// Golden Dallah Wedding Services - React Application (Full-Bleed Fullscreen Hero Canvas & White Theme)
+// Golden Dallah Wedding Services - React Application (Mobile Optimized & White Theme)
 
 const { useState, useEffect, useRef } = React;
 const { motion, AnimatePresence } = window.FramerMotion || { 
@@ -141,7 +141,7 @@ const DallahLogo = ({ className = "w-10 h-10" }) => (
   </svg>
 );
 
-// FULL-BLEED FULLSCREEN HERO SCROLL CANVAS COMPONENT
+// MOBILE-PERFECT FULL-BLEED HERO SCROLL CANVAS COMPONENT
 function HeroScrollCanvas({ t, isRtl }) {
   const containerRef = useRef(null);
   const canvasRef = useRef(null);
@@ -189,7 +189,7 @@ function HeroScrollCanvas({ t, isRtl }) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Render Full-Bleed High Quality Canvas Frame
+  // Render High Quality Canvas Frame (Optimized for Mobile High-DPI)
   useEffect(() => {
     if (!canvasRef.current || imagesRef.current.length === 0) return;
     const canvas = canvasRef.current;
@@ -202,7 +202,7 @@ function HeroScrollCanvas({ t, isRtl }) {
 
     const img = imagesRef.current[frameIndex];
     if (img && img.complete) {
-      const dpr = window.devicePixelRatio || 1;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2); // Cap at 2x for mobile memory performance
       const displayWidth = window.innerWidth;
       const displayHeight = window.innerHeight;
 
@@ -242,26 +242,26 @@ function HeroScrollCanvas({ t, isRtl }) {
     scrollProgress < 0.75 ? 2 : 3;
 
   return (
-    <div ref={containerRef} className="relative h-[360vh] bg-black">
+    <div ref={containerRef} className="relative h-[340vh] sm:h-[360vh] bg-black">
       
       {/* Sticky Fullscreen Frame Viewport */}
-      <div className="sticky top-0 h-screen w-full overflow-hidden flex items-end justify-center pb-8 sm:pb-12">
+      <div className="sticky top-0 h-screen w-full overflow-hidden flex items-end justify-center pb-6 sm:pb-12">
         
         {/* Fullscreen Full-Bleed Canvas */}
         <canvas ref={canvasRef} className="absolute inset-0 w-full h-full object-cover z-0" />
 
-        {/* Soft Vignette Overlay for Text Readability */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/40 pointer-events-none z-10" />
+        {/* Soft Mobile-Optimized Overlay Gradient */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 to-black/40 pointer-events-none z-10" />
 
-        {/* Scroll Progress Bar Top Indicator */}
-        <div className="absolute top-20 left-0 right-0 h-1.5 bg-white/10 z-30">
+        {/* Scroll Progress Bar Header */}
+        <div className="absolute top-16 sm:top-20 left-0 right-0 h-1 sm:h-1.5 bg-white/10 z-30">
           <div 
             className="h-full bg-gradient-to-r from-[#D4AF37] via-[#F7E7A9] to-[#D4AF37] transition-all duration-150"
             style={{ width: `${scrollProgress * 100}%` }}
           />
         </div>
 
-        {/* Dynamic Glassmorphic Feature Overlay Cards */}
+        {/* Dynamic Glassmorphic Feature Overlay Cards (Mobile-Perfect Sizing) */}
         <div className="relative z-20 max-w-4xl mx-auto px-4 w-full text-center">
           
           <AnimatePresence mode="wait">
@@ -269,36 +269,36 @@ function HeroScrollCanvas({ t, isRtl }) {
             {activeStage === 0 && (
               <motion.div
                 key="stage0"
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -30 }}
-                transition={{ duration: 0.5 }}
-                className="bg-[#0F2A23]/85 backdrop-blur-md p-6 sm:p-10 rounded-3xl border-2 border-[#D4AF37] shadow-2xl text-white space-y-4"
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.4 }}
+                className="bg-[#0F2A23]/90 backdrop-blur-md p-5 sm:p-10 rounded-2xl sm:rounded-3xl border-2 border-[#D4AF37] shadow-2xl text-white space-y-3 sm:space-y-4"
               >
-                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#D4AF37] bg-[#D4AF37]/20">
-                  <Icon name="Crown" className="w-4 h-4 text-[#F7E7A9]" />
-                  <span className="text-xs sm:text-sm font-bold text-[#F7E7A9] tracking-wide">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-[#D4AF37] bg-[#D4AF37]/20">
+                  <Icon name="Crown" className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#F7E7A9]" />
+                  <span className="text-[11px] sm:text-sm font-bold text-[#F7E7A9] tracking-wide">
                     {t.hero.badge}
                   </span>
                 </div>
 
-                <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold font-serif leading-tight">
+                <h1 className="text-2xl sm:text-5xl lg:text-6xl font-bold font-serif leading-tight">
                   <span className="block text-white">{t.hero.titleLine1}</span>
-                  <span className="bg-gradient-to-r from-[#F7E7A9] via-[#D4AF37] to-[#AA7C11] bg-clip-text text-transparent block py-1 font-serif">
+                  <span className="bg-gradient-to-r from-[#F7E7A9] via-[#D4AF37] to-[#AA7C11] bg-clip-text text-transparent block py-0.5 font-serif">
                     {t.hero.titleLine2}
                   </span>
-                  <span className="text-lg sm:text-2xl font-normal text-[#D4AF37] block">
+                  <span className="text-sm sm:text-2xl font-normal text-[#D4AF37] block">
                     {t.hero.titleLine3}
                   </span>
                 </h1>
 
-                <p className="max-w-2xl mx-auto text-xs sm:text-sm text-gray-200 font-light leading-relaxed">
+                <p className="max-w-2xl mx-auto text-xs sm:text-sm text-gray-200 font-light leading-relaxed hidden xs:block sm:block">
                   {t.hero.subtitle}
                 </p>
 
-                <div className="pt-2 flex items-center justify-center gap-2 text-xs font-bold text-[#F7E7A9] animate-bounce">
+                <div className="pt-1 flex items-center justify-center gap-2 text-[11px] sm:text-xs font-bold text-[#F7E7A9] animate-bounce">
                   <span>{t.hero.scrollHint}</span>
-                  <Icon name="ChevronDown" className="w-4 h-4" />
+                  <Icon name="ChevronDown" className="w-3.5 h-3.5" />
                 </div>
               </motion.div>
             )}
@@ -307,16 +307,16 @@ function HeroScrollCanvas({ t, isRtl }) {
             {activeStage === 1 && (
               <motion.div
                 key="stage1"
-                initial={{ opacity: 0, scale: 0.95, y: 30 }}
+                initial={{ opacity: 0, scale: 0.95, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95, y: -30 }}
-                transition={{ duration: 0.5 }}
-                className="max-w-xl mx-auto bg-[#0F2A23]/90 backdrop-blur-md p-6 sm:p-8 rounded-3xl border-2 border-[#D4AF37] shadow-2xl text-white text-start space-y-3"
+                exit={{ opacity: 0, scale: 0.95, y: -20 }}
+                transition={{ duration: 0.4 }}
+                className="max-w-xl mx-auto bg-[#0F2A23]/95 backdrop-blur-md p-5 sm:p-8 rounded-2xl sm:rounded-3xl border-2 border-[#D4AF37] shadow-2xl text-white text-start space-y-2 sm:space-y-3"
               >
-                <div className="inline-block px-3 py-1 rounded-full bg-[#D4AF37] text-[#0F2A23] text-xs font-bold uppercase tracking-wider">
+                <div className="inline-block px-3 py-1 rounded-full bg-[#D4AF37] text-[#0F2A23] text-[10px] sm:text-xs font-bold uppercase tracking-wider">
                   {t.hero.features[0].tag}
                 </div>
-                <h2 className="text-2xl sm:text-3xl font-bold font-serif text-[#F7E7A9]">
+                <h2 className="text-xl sm:text-3xl font-bold font-serif text-[#F7E7A9]">
                   {t.hero.features[0].title}
                 </h2>
                 <p className="text-xs sm:text-sm text-gray-200 leading-relaxed">
@@ -329,16 +329,16 @@ function HeroScrollCanvas({ t, isRtl }) {
             {activeStage === 2 && (
               <motion.div
                 key="stage2"
-                initial={{ opacity: 0, scale: 0.95, y: 30 }}
+                initial={{ opacity: 0, scale: 0.95, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95, y: -30 }}
-                transition={{ duration: 0.5 }}
-                className="max-w-xl mx-auto bg-[#0F2A23]/90 backdrop-blur-md p-6 sm:p-8 rounded-3xl border-2 border-[#D4AF37] shadow-2xl text-white text-start space-y-3"
+                exit={{ opacity: 0, scale: 0.95, y: -20 }}
+                transition={{ duration: 0.4 }}
+                className="max-w-xl mx-auto bg-[#0F2A23]/95 backdrop-blur-md p-5 sm:p-8 rounded-2xl sm:rounded-3xl border-2 border-[#D4AF37] shadow-2xl text-white text-start space-y-2 sm:space-y-3"
               >
-                <div className="inline-block px-3 py-1 rounded-full bg-[#D4AF37] text-[#0F2A23] text-xs font-bold uppercase tracking-wider">
+                <div className="inline-block px-3 py-1 rounded-full bg-[#D4AF37] text-[#0F2A23] text-[10px] sm:text-xs font-bold uppercase tracking-wider">
                   {t.hero.features[1].tag}
                 </div>
-                <h2 className="text-2xl sm:text-3xl font-bold font-serif text-[#F7E7A9]">
+                <h2 className="text-xl sm:text-3xl font-bold font-serif text-[#F7E7A9]">
                   {t.hero.features[1].title}
                 </h2>
                 <p className="text-xs sm:text-sm text-gray-200 leading-relaxed">
@@ -351,16 +351,16 @@ function HeroScrollCanvas({ t, isRtl }) {
             {activeStage === 3 && (
               <motion.div
                 key="stage3"
-                initial={{ opacity: 0, scale: 0.95, y: 30 }}
+                initial={{ opacity: 0, scale: 0.95, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95, y: -30 }}
-                transition={{ duration: 0.5 }}
-                className="max-w-2xl mx-auto bg-[#0F2A23]/95 backdrop-blur-md p-6 sm:p-8 rounded-3xl border-2 border-[#D4AF37] shadow-2xl text-white space-y-4"
+                exit={{ opacity: 0, scale: 0.95, y: -20 }}
+                transition={{ duration: 0.4 }}
+                className="max-w-2xl mx-auto bg-[#0F2A23]/95 backdrop-blur-md p-5 sm:p-8 rounded-2xl sm:rounded-3xl border-2 border-[#D4AF37] shadow-2xl text-white space-y-3 sm:space-y-4"
               >
-                <div className="inline-block px-3 py-1 rounded-full bg-[#D4AF37] text-[#0F2A23] text-xs font-bold uppercase tracking-wider">
+                <div className="inline-block px-3 py-1 rounded-full bg-[#D4AF37] text-[#0F2A23] text-[10px] sm:text-xs font-bold uppercase tracking-wider">
                   {t.hero.features[2].tag}
                 </div>
-                <h2 className="text-2xl sm:text-3xl font-bold font-serif text-[#F7E7A9]">
+                <h2 className="text-xl sm:text-3xl font-bold font-serif text-[#F7E7A9]">
                   {t.hero.features[2].title}
                 </h2>
                 <p className="text-xs sm:text-sm text-gray-200 leading-relaxed max-w-lg mx-auto">
@@ -370,7 +370,7 @@ function HeroScrollCanvas({ t, isRtl }) {
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
                   <a
                     href="#booking"
-                    className="w-full sm:w-auto px-6 py-3.5 rounded-full bg-gradient-to-r from-[#D4AF37] via-[#E5C158] to-[#AA7C11] text-[#0F2A23] font-bold text-xs shadow-xl hover:brightness-110 flex items-center justify-center gap-2"
+                    className="w-full sm:w-auto px-6 py-3 sm:py-3.5 rounded-full bg-gradient-to-r from-[#D4AF37] via-[#E5C158] to-[#AA7C11] text-[#0F2A23] font-bold text-xs shadow-xl hover:brightness-110 flex items-center justify-center gap-2"
                   >
                     <span>{t.hero.ctaPrimary}</span>
                     <Icon name={isRtl ? "ChevronLeft" : "ChevronRight"} className="w-4 h-4" />
@@ -380,9 +380,9 @@ function HeroScrollCanvas({ t, isRtl }) {
                     href="https://wa.me/971506672259"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full sm:w-auto px-6 py-3.5 rounded-full bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-xs shadow-xl flex items-center justify-center gap-2"
+                    className="w-full sm:w-auto px-6 py-3 sm:py-3.5 rounded-full bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-xs shadow-xl flex items-center justify-center gap-2"
                   >
-                    <Icon name="MessageCircle" className="w-5 h-5" />
+                    <Icon name="MessageCircle" className="w-4 h-4 sm:w-5 sm:h-5" />
                     <span>{t.hero.ctaSecondary}</span>
                   </a>
                 </div>
@@ -497,27 +497,27 @@ function App() {
             initial={{ opacity: 0, y: -50, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -20, scale: 0.9 }}
-            className="fixed top-24 left-1/2 -translate-x-1/2 z-50 bg-[#0F2A23] text-white px-6 py-3 rounded-full shadow-2xl border border-[#D4AF37] flex items-center gap-3 font-semibold text-sm"
+            className="fixed top-20 sm:top-24 left-1/2 -translate-x-1/2 z-50 bg-[#0F2A23] text-white px-5 py-2.5 sm:px-6 sm:py-3 rounded-full shadow-2xl border border-[#D4AF37] flex items-center gap-2.5 font-semibold text-xs sm:text-sm max-w-[90vw] text-center"
           >
-            <Icon name="Check" className="w-5 h-5 text-[#D4AF37]" />
+            <Icon name="Check" className="w-4 h-4 sm:w-5 sm:h-5 text-[#D4AF37] shrink-0" />
             <span>{toastMessage}</span>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* HEADER & NAVIGATION (WHITE GLASSMORPHISM WITH DYNAMIC BRAND NAME) */}
+      {/* HEADER & NAVIGATION (WHITE GLASSMORPHISM WITH MOBILE DRAWER) */}
       <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-[#D4AF37]/30 shadow-sm transition-all duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-20">
+          <div className="flex items-center justify-between h-16 sm:h-20">
             
             {/* Brand Logo */}
-            <a href="#" className="flex items-center gap-3 group">
-              <DallahLogo className="w-11 h-11 transform group-hover:scale-105 transition-transform duration-300" />
+            <a href="#" className="flex items-center gap-2.5 sm:gap-3 group">
+              <DallahLogo className="w-9 h-9 sm:w-11 sm:h-11 transform group-hover:scale-105 transition-transform duration-300" />
               <div className="flex flex-col">
-                <span className="text-xl sm:text-2xl font-bold text-[#0F2A23] font-serif tracking-wide">
+                <span className="text-lg sm:text-2xl font-bold text-[#0F2A23] font-serif tracking-wide">
                   {t.nav.brandName}
                 </span>
-                <span className="text-[10px] sm:text-xs text-[#D4AF37] font-semibold tracking-widest uppercase">
+                <span className="text-[9px] sm:text-xs text-[#D4AF37] font-semibold tracking-widest uppercase">
                   {t.nav.brandSub}
                 </span>
               </div>
@@ -550,8 +550,8 @@ function App() {
               </button>
             </div>
 
-            {/* Mobile Menu Button */}
-            <div className="flex sm:hidden items-center gap-3">
+            {/* Mobile Menu Trigger & Language Toggle */}
+            <div className="flex sm:hidden items-center gap-2">
               <button
                 onClick={toggleLanguage}
                 className="px-3 py-1.5 rounded-full bg-[#0F2A23] text-[#D4AF37] font-bold text-xs"
@@ -560,7 +560,8 @@ function App() {
               </button>
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="p-2 text-[#0F2A23] hover:bg-gray-100 rounded-lg"
+                className="p-2 text-[#0F2A23] hover:bg-gray-100 rounded-lg active:scale-95 transition-transform"
+                aria-label="Toggle Navigation Menu"
               >
                 <Icon name={mobileMenuOpen ? "X" : "Menu"} className="w-6 h-6" />
               </button>
@@ -576,17 +577,17 @@ function App() {
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              className="sm:hidden bg-white border-b border-gray-200 px-6 py-6 space-y-4 font-semibold text-[#0F2A23]"
+              className="sm:hidden bg-white/98 backdrop-blur-xl border-b border-gray-200 px-6 py-6 space-y-4 font-semibold text-[#0F2A23] shadow-2xl"
             >
-              <a href="#about" onClick={() => setMobileMenuOpen(false)} className="block hover:text-[#D4AF37]">{t.nav.about}</a>
-              <a href="#services" onClick={() => setMobileMenuOpen(false)} className="block hover:text-[#D4AF37]">{t.nav.services}</a>
-              <a href="#capacity" onClick={() => setMobileMenuOpen(false)} className="block hover:text-[#D4AF37]">{t.nav.capacity}</a>
-              <a href="#booking" onClick={() => setMobileMenuOpen(false)} className="block hover:text-[#D4AF37]">{t.nav.booking}</a>
-              <a href="#contact" onClick={() => setMobileMenuOpen(false)} className="block hover:text-[#D4AF37]">{t.nav.contact}</a>
+              <a href="#about" onClick={() => setMobileMenuOpen(false)} className="block py-1 hover:text-[#D4AF37] text-base">{t.nav.about}</a>
+              <a href="#services" onClick={() => setMobileMenuOpen(false)} className="block py-1 hover:text-[#D4AF37] text-base">{t.nav.services}</a>
+              <a href="#capacity" onClick={() => setMobileMenuOpen(false)} className="block py-1 hover:text-[#D4AF37] text-base">{t.nav.capacity}</a>
+              <a href="#booking" onClick={() => setMobileMenuOpen(false)} className="block py-1 hover:text-[#D4AF37] text-base">{t.nav.booking}</a>
+              <a href="#contact" onClick={() => setMobileMenuOpen(false)} className="block py-1 hover:text-[#D4AF37] text-base">{t.nav.contact}</a>
               <div className="pt-4 border-t border-gray-100 flex flex-col gap-3">
                 <a
                   href="tel:+971555593389"
-                  className="flex items-center justify-center gap-2 py-3 rounded-xl bg-[#0F2A23] text-[#D4AF37] font-bold text-sm"
+                  className="flex items-center justify-center gap-2 py-3.5 rounded-xl bg-[#0F2A23] text-[#D4AF37] font-bold text-sm shadow-md"
                 >
                   <Icon name="Phone" className="w-4 h-4" />
                   <span>VIP Direct: +971 55 559 3389</span>
@@ -601,14 +602,14 @@ function App() {
       <HeroScrollCanvas t={t} isRtl={isRtl} />
 
       {/* STATS STRIP SECTION */}
-      <section className="py-12 bg-[#F8F9FA] border-t border-b border-[#D4AF37]/30">
-        <div className="max-w-7xl mx-auto px-4 grid grid-cols-2 lg:grid-cols-4 gap-6 text-center">
+      <section className="py-8 sm:py-12 bg-[#F8F9FA] border-t border-b border-[#D4AF37]/30">
+        <div className="max-w-7xl mx-auto px-4 grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 text-center">
           {t.hero.stats.map((stat, idx) => (
-            <div key={idx} className="p-6 rounded-2xl bg-white border border-[#D4AF37]/30 shadow-sm">
-              <div className="text-3xl sm:text-4xl font-bold font-serif text-[#0F2A23]">
+            <div key={idx} className="p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-white border border-[#D4AF37]/30 shadow-sm">
+              <div className="text-2xl sm:text-4xl font-bold font-serif text-[#0F2A23]">
                 {stat.value}
               </div>
-              <div className="text-xs sm:text-sm text-[#555] font-semibold mt-1">
+              <div className="text-[11px] sm:text-sm text-[#555] font-semibold mt-0.5 sm:mt-1">
                 {stat.label}
               </div>
             </div>
@@ -617,62 +618,62 @@ function App() {
       </section>
 
       {/* ABOUT SECTION (WHITE THEME) */}
-      <section id="about" className="py-24 px-4 sm:px-6 lg:px-8 bg-white">
+      <section id="about" className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-7xl mx-auto">
           
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-12 items-center">
             
             <motion.div
-              initial={{ opacity: 0, x: isRtl ? 40 : -40 }}
+              initial={{ opacity: 0, x: isRtl ? 30 : -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              className="lg:col-span-6 space-y-6"
+              transition={{ duration: 0.7 }}
+              className="lg:col-span-6 space-y-4 sm:space-y-6"
             >
               <div className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-[#D4AF37] font-bold">
-                <span className="w-8 h-[2px] bg-[#D4AF37]" />
+                <span className="w-6 sm:w-8 h-[2px] bg-[#D4AF37]" />
                 <span>{t.about.tag}</span>
               </div>
 
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-serif leading-tight text-[#0F2A23]">
+              <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold font-serif leading-tight text-[#0F2A23]">
                 {t.about.title}
               </h2>
 
-              <p className="text-base sm:text-lg text-[#333333] leading-relaxed">
+              <p className="text-sm sm:text-lg text-[#333333] leading-relaxed">
                 {t.about.desc1}
               </p>
 
-              <p className="text-base sm:text-lg text-[#555555] leading-relaxed font-light">
+              <p className="text-sm sm:text-lg text-[#555555] leading-relaxed font-light">
                 {t.about.desc2}
               </p>
 
-              <div className="pt-4 flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-[#0F2A23] text-[#D4AF37] flex items-center justify-center">
-                  <Icon name="Crown" className="w-6 h-6" />
+              <div className="pt-2 sm:pt-4 flex items-center gap-4">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#0F2A23] text-[#D4AF37] flex items-center justify-center shrink-0">
+                  <Icon name="Crown" className="w-5 h-5 sm:w-6 sm:h-6" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-base text-[#0F2A23]">Established 1998</h4>
+                  <h4 className="font-bold text-sm sm:text-base text-[#0F2A23]">Established 1998</h4>
                   <p className="text-xs text-[#666]">25+ Years UAE Hospitality Excellence</p>
                 </div>
               </div>
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, x: isRtl ? -40 : 40 }}
+              initial={{ opacity: 0, x: isRtl ? -30 : 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              className="lg:col-span-6 grid grid-cols-1 sm:grid-cols-2 gap-6"
+              transition={{ duration: 0.7 }}
+              className="lg:col-span-6 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6"
             >
               {t.about.features.map((feat, idx) => (
                 <div
                   key={idx}
-                  className="p-6 rounded-2xl bg-[#F8F9FA] border border-[#D4AF37]/30 hover:border-[#D4AF37] hover:shadow-xl transition-all duration-300 group"
+                  className="p-5 sm:p-6 rounded-2xl bg-[#F8F9FA] border border-[#D4AF37]/30 hover:border-[#D4AF37] hover:shadow-xl transition-all duration-300 group"
                 >
-                  <div className="w-10 h-10 rounded-xl bg-[#0F2A23] text-[#D4AF37] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                    <Icon name="Sparkles" className="w-5 h-5" />
+                  <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#0F2A23] text-[#D4AF37] flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform">
+                    <Icon name="Sparkles" className="w-4 h-4 sm:w-5 sm:h-5" />
                   </div>
-                  <h3 className="text-lg font-bold font-serif text-[#0F2A23] mb-2">
+                  <h3 className="text-base sm:text-lg font-bold font-serif text-[#0F2A23] mb-1.5">
                     {feat.title}
                   </h3>
                   <p className="text-xs sm:text-sm text-[#555] leading-relaxed">
@@ -688,50 +689,50 @@ function App() {
       </section>
 
       {/* CORE SERVICES GRID */}
-      <section id="services" className="py-24 px-4 sm:px-6 lg:px-8 bg-[#F8F9FA] border-t border-b border-gray-100">
+      <section id="services" className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-[#F8F9FA] border-t border-b border-gray-100">
         <div className="max-w-7xl mx-auto">
           
-          <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
+          <div className="text-center max-w-3xl mx-auto space-y-3 sm:space-y-4 mb-12 sm:mb-16">
             <div className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-[#D4AF37] font-bold">
-              <span className="w-8 h-[2px] bg-[#D4AF37]" />
+              <span className="w-6 sm:w-8 h-[2px] bg-[#D4AF37]" />
               <span>{t.services.tag}</span>
-              <span className="w-8 h-[2px] bg-[#D4AF37]" />
+              <span className="w-6 sm:w-8 h-[2px] bg-[#D4AF37]" />
             </div>
-            <h2 className="text-3xl sm:text-5xl font-bold font-serif text-[#0F2A23]">
+            <h2 className="text-2xl sm:text-5xl font-bold font-serif text-[#0F2A23]">
               {t.services.title}
             </h2>
-            <p className="text-base text-[#555] font-light">
+            <p className="text-xs sm:text-base text-[#555] font-light">
               {t.services.subtitle}
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
             {t.services.cards.map((service, idx) => (
               <motion.div
                 key={service.id}
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 25 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: idx * 0.2 }}
-                whileHover={{ y: -8 }}
+                transition={{ duration: 0.5, delay: idx * 0.15 }}
+                whileHover={{ y: -6 }}
                 onClick={() => setSelectedServiceModal(service)}
-                className="cursor-pointer p-8 rounded-3xl bg-white border border-[#D4AF37]/30 hover:border-[#D4AF37] shadow-xl transition-all duration-300 flex flex-col justify-between group"
+                className="cursor-pointer p-6 sm:p-8 rounded-2xl sm:rounded-3xl bg-white border border-[#D4AF37]/30 hover:border-[#D4AF37] shadow-xl transition-all duration-300 flex flex-col justify-between group active:scale-[0.99]"
               >
                 <div>
-                  <div className="w-14 h-14 rounded-2xl bg-[#0F2A23] text-[#D4AF37] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                    <Icon name={service.icon} className="w-7 h-7" />
+                  <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-[#0F2A23] text-[#D4AF37] flex items-center justify-center mb-4 sm:mb-6 group-hover:scale-110 transition-transform">
+                    <Icon name={service.icon} className="w-6 h-6 sm:w-7 sm:h-7" />
                   </div>
 
-                  <h3 className="text-2xl font-bold font-serif text-[#0F2A23] mb-3 group-hover:text-[#D4AF37] transition-colors">
+                  <h3 className="text-xl sm:text-2xl font-bold font-serif text-[#0F2A23] mb-2 sm:mb-3 group-hover:text-[#D4AF37] transition-colors">
                     {service.title}
                   </h3>
 
-                  <p className="text-sm text-[#555] leading-relaxed mb-6">
+                  <p className="text-xs sm:text-sm text-[#555] leading-relaxed mb-4 sm:mb-6">
                     {service.shortDesc}
                   </p>
                 </div>
 
-                <div className="space-y-3 pt-4 border-t border-gray-100">
+                <div className="space-y-2.5 pt-4 border-t border-gray-100">
                   {service.details.slice(0, 2).map((item, itemIdx) => (
                     <div key={itemIdx} className="flex items-center gap-2 text-xs text-[#333]">
                       <Icon name="Check" className="w-4 h-4 text-[#D4AF37] shrink-0" />
@@ -739,7 +740,7 @@ function App() {
                     </div>
                   ))}
                   
-                  <div className="pt-4 flex items-center gap-2 text-xs font-bold text-[#0F2A23] group-hover:underline">
+                  <div className="pt-3 flex items-center gap-2 text-xs font-bold text-[#0F2A23] group-hover:underline">
                     <span>{t.services.modalCta}</span>
                     <Icon name={isRtl ? "ChevronLeft" : "ChevronRight"} className="w-4 h-4 text-[#D4AF37]" />
                   </div>
@@ -751,44 +752,45 @@ function App() {
         </div>
       </section>
 
-      {/* SERVICE MODAL POPUP */}
+      {/* SERVICE MODAL POPUP (TOUCH ACCESSIBLE) */}
       <AnimatePresence>
         {selectedServiceModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
             <motion.div
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative w-full max-w-xl p-8 rounded-3xl bg-white border-2 border-[#D4AF37] shadow-2xl text-[#1A1A1A] space-y-6"
+              className="relative w-full max-w-xl p-6 sm:p-8 rounded-2xl sm:rounded-3xl bg-white border-2 border-[#D4AF37] shadow-2xl text-[#1A1A1A] space-y-4 sm:space-y-6 max-h-[88vh] overflow-y-auto"
             >
               <button
                 onClick={() => setSelectedServiceModal(null)}
-                className="absolute top-6 right-6 p-2 rounded-full bg-gray-100 hover:bg-gray-200 text-[#0F2A23]"
+                className="absolute top-4 right-4 sm:top-6 sm:right-6 p-2 rounded-full bg-gray-100 hover:bg-gray-200 text-[#0F2A23]"
+                aria-label="Close modal"
               >
                 <Icon name="X" className="w-5 h-5" />
               </button>
 
-              <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-2xl bg-[#0F2A23] text-[#D4AF37] flex items-center justify-center">
-                  <Icon name={selectedServiceModal.icon} className="w-7 h-7" />
+              <div className="flex items-center gap-3 sm:gap-4 pr-8">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-[#0F2A23] text-[#D4AF37] flex items-center justify-center shrink-0">
+                  <Icon name={selectedServiceModal.icon} className="w-6 h-6 sm:w-7 sm:h-7" />
                 </div>
                 <div>
-                  <h3 className="text-2xl font-bold font-serif text-[#0F2A23]">
+                  <h3 className="text-xl sm:text-2xl font-bold font-serif text-[#0F2A23]">
                     {selectedServiceModal.title}
                   </h3>
-                  <p className="text-xs text-[#D4AF37] font-semibold">Golden Dallah Premier Provisioning</p>
+                  <p className="text-[11px] sm:text-xs text-[#D4AF37] font-semibold">Golden Dallah Premier Provisioning</p>
                 </div>
               </div>
 
-              <p className="text-sm text-[#444] leading-relaxed">
+              <p className="text-xs sm:text-sm text-[#444] leading-relaxed">
                 {selectedServiceModal.shortDesc}
               </p>
 
-              <div className="space-y-3 bg-[#F8F9FA] p-5 rounded-2xl border border-gray-200">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-[#0F2A23]">Service Provisions & Specs:</h4>
+              <div className="space-y-2.5 bg-[#F8F9FA] p-4 sm:p-5 rounded-xl sm:rounded-2xl border border-gray-200">
+                <h4 className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[#0F2A23]">Service Provisions & Specs:</h4>
                 {selectedServiceModal.details.map((detail, dIdx) => (
-                  <div key={dIdx} className="flex items-start gap-3 text-sm text-[#333]">
-                    <Icon name="Check" className="w-4 h-4 text-[#D4AF37] mt-1 shrink-0" />
+                  <div key={dIdx} className="flex items-start gap-2.5 text-xs sm:text-sm text-[#333]">
+                    <Icon name="Check" className="w-4 h-4 text-[#D4AF37] mt-0.5 shrink-0" />
                     <span>{detail}</span>
                   </div>
                 ))}
@@ -798,7 +800,7 @@ function App() {
                 <a
                   href="#booking"
                   onClick={() => setSelectedServiceModal(null)}
-                  className="block w-full py-3.5 rounded-full bg-[#0F2A23] text-[#D4AF37] font-bold text-center text-sm shadow-lg hover:bg-[#16382F]"
+                  className="block w-full py-3.5 rounded-full bg-[#0F2A23] text-[#D4AF37] font-bold text-center text-xs sm:text-sm shadow-lg hover:bg-[#16382F]"
                 >
                   {t.hero.ctaPrimary}
                 </a>
@@ -809,30 +811,30 @@ function App() {
       </AnimatePresence>
 
       {/* CAPACITY & SCALE SHOWCASE */}
-      <section id="capacity" className="py-24 px-4 sm:px-6 lg:px-8 bg-white">
+      <section id="capacity" className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-7xl mx-auto">
           
-          <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
+          <div className="text-center max-w-3xl mx-auto space-y-3 sm:space-y-4 mb-12 sm:mb-16">
             <div className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-[#D4AF37] font-bold">
-              <span className="w-8 h-[2px] bg-[#D4AF37]" />
+              <span className="w-6 sm:w-8 h-[2px] bg-[#D4AF37]" />
               <span>{t.capacity.tag}</span>
-              <span className="w-8 h-[2px] bg-[#D4AF37]" />
+              <span className="w-6 sm:w-8 h-[2px] bg-[#D4AF37]" />
             </div>
-            <h2 className="text-3xl sm:text-5xl font-bold font-serif text-[#0F2A23]">
+            <h2 className="text-2xl sm:text-5xl font-bold font-serif text-[#0F2A23]">
               {t.capacity.title}
             </h2>
-            <p className="text-base text-[#555] font-light">
+            <p className="text-xs sm:text-base text-[#555] font-light">
               {t.capacity.subtitle}
             </p>
           </div>
 
-          <div className="flex justify-center mb-12">
-            <div className="p-1.5 rounded-full bg-[#F8F9FA] border border-[#D4AF37]/30 inline-flex gap-2">
+          <div className="flex justify-center mb-8 sm:mb-12">
+            <div className="p-1 sm:p-1.5 rounded-2xl sm:rounded-full bg-[#F8F9FA] border border-[#D4AF37]/30 flex flex-wrap sm:flex-nowrap justify-center gap-1.5 sm:gap-2 max-w-full">
               {t.capacity.tiers.map((tier) => (
                 <button
                   key={tier.id}
                   onClick={() => setActiveCapacityTab(tier.id)}
-                  className={`px-6 py-3 rounded-full text-xs sm:text-sm font-bold transition-all ${
+                  className={`px-4 py-2 sm:px-6 sm:py-3 rounded-xl sm:rounded-full text-xs sm:text-sm font-bold transition-all ${
                     activeCapacityTab === tier.id
                       ? 'bg-[#0F2A23] text-[#D4AF37] shadow-lg scale-105'
                       : 'text-[#555] hover:text-[#0F2A23]'
@@ -851,39 +853,39 @@ function App() {
                 key={tier.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                className="max-w-4xl mx-auto p-8 sm:p-12 rounded-3xl bg-[#FAF8F5] border-2 border-[#D4AF37] shadow-2xl relative overflow-hidden"
+                transition={{ duration: 0.4 }}
+                className="max-w-4xl mx-auto p-6 sm:p-12 rounded-2xl sm:rounded-3xl bg-[#FAF8F5] border-2 border-[#D4AF37] shadow-2xl relative overflow-hidden"
               >
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-center">
                   
-                  <div className="lg:col-span-7 space-y-6">
-                    <div className="inline-block px-4 py-1.5 rounded-full bg-[#0F2A23] text-xs font-bold text-[#D4AF37]">
+                  <div className="lg:col-span-7 space-y-4 sm:space-y-6">
+                    <div className="inline-block px-3.5 py-1 sm:px-4 sm:py-1.5 rounded-full bg-[#0F2A23] text-[11px] sm:text-xs font-bold text-[#D4AF37]">
                       {tier.range}
                     </div>
 
-                    <h3 className="text-3xl font-bold font-serif text-[#0F2A23]">
+                    <h3 className="text-2xl sm:text-3xl font-bold font-serif text-[#0F2A23]">
                       {tier.name}
                     </h3>
 
-                    <p className="text-base text-[#444] leading-relaxed">
+                    <p className="text-xs sm:text-base text-[#444] leading-relaxed">
                       {tier.desc}
                     </p>
 
                     <a
                       href="#booking"
-                      className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-[#0F2A23] text-[#D4AF37] font-bold text-xs hover:bg-[#16382F]"
+                      className="inline-flex items-center justify-center gap-2 sm:gap-3 px-5 py-3 sm:px-6 sm:py-3 rounded-full bg-[#0F2A23] text-[#D4AF37] font-bold text-xs hover:bg-[#16382F] w-full sm:w-auto"
                     >
                       <span>{t.hero.ctaPrimary}</span>
                       <Icon name={isRtl ? "ChevronLeft" : "ChevronRight"} className="w-4 h-4" />
                     </a>
                   </div>
 
-                  <div className="lg:col-span-5 bg-white p-6 rounded-2xl border border-gray-200 shadow-sm space-y-4">
-                    <h4 className="text-xs font-bold text-[#0F2A23] uppercase tracking-wider">What's Included:</h4>
+                  <div className="lg:col-span-5 bg-white p-5 sm:p-6 rounded-xl sm:rounded-2xl border border-gray-200 shadow-sm space-y-3 sm:space-y-4">
+                    <h4 className="text-[11px] sm:text-xs font-bold text-[#0F2A23] uppercase tracking-wider">What's Included:</h4>
                     {tier.includes.map((inc, iIdx) => (
-                      <div key={iIdx} className="flex items-center gap-3 text-sm text-[#333]">
-                        <div className="w-6 h-6 rounded-full bg-[#D4AF37]/20 flex items-center justify-center text-[#0F2A23] shrink-0">
-                          <Icon name="Check" className="w-3.5 h-3.5" />
+                      <div key={iIdx} className="flex items-center gap-2.5 text-xs sm:text-sm text-[#333]">
+                        <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-[#D4AF37]/20 flex items-center justify-center text-[#0F2A23] shrink-0">
+                          <Icon name="Check" className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                         </div>
                         <span>{inc}</span>
                       </div>
@@ -899,32 +901,32 @@ function App() {
       </section>
 
       {/* INTERACTIVE BOOKING INQUIRY FORM */}
-      <section id="booking" className="py-24 px-4 sm:px-6 lg:px-8 bg-[#F8F9FA] border-t border-gray-200">
+      <section id="booking" className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-[#F8F9FA] border-t border-gray-200">
         <div className="max-w-4xl mx-auto">
           
-          <div className="text-center space-y-4 mb-12">
+          <div className="text-center space-y-3 sm:space-y-4 mb-10 sm:mb-12">
             <div className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-[#D4AF37] font-bold">
-              <span className="w-8 h-[2px] bg-[#D4AF37]" />
+              <span className="w-6 sm:w-8 h-[2px] bg-[#D4AF37]" />
               <span>{t.booking.tag}</span>
-              <span className="w-8 h-[2px] bg-[#D4AF37]" />
+              <span className="w-6 sm:w-8 h-[2px] bg-[#D4AF37]" />
             </div>
-            <h2 className="text-3xl sm:text-5xl font-bold font-serif text-[#0F2A23]">
+            <h2 className="text-2xl sm:text-5xl font-bold font-serif text-[#0F2A23]">
               {t.booking.title}
             </h2>
-            <p className="text-sm sm:text-base text-[#555] font-light max-w-2xl mx-auto">
+            <p className="text-xs sm:text-base text-[#555] font-light max-w-2xl mx-auto">
               {t.booking.subtitle}
             </p>
           </div>
 
-          <div className="p-6 sm:p-10 rounded-3xl bg-white border-2 border-[#D4AF37]/40 shadow-2xl">
+          <div className="p-5 sm:p-10 rounded-2xl sm:rounded-3xl bg-white border-2 border-[#D4AF37]/40 shadow-2xl">
             
             {/* Progress Bar */}
-            <div className="mb-10">
-              <div className="flex justify-between items-center mb-4 text-xs font-bold text-[#0F2A23]">
+            <div className="mb-8 sm:mb-10">
+              <div className="flex justify-between items-center mb-3 sm:mb-4 text-xs font-bold text-[#0F2A23]">
                 <span>Step {formStep} of 4</span>
                 <span>{t.booking.steps[formStep - 1]}</span>
               </div>
-              <div className="w-full bg-gray-100 h-2.5 rounded-full overflow-hidden">
+              <div className="w-full bg-gray-100 h-2 sm:h-2.5 rounded-full overflow-hidden">
                 <motion.div
                   className="bg-gradient-to-r from-[#D4AF37] to-[#0F2A23] h-full"
                   initial={{ width: "25%" }}
@@ -938,23 +940,23 @@ function App() {
               
               {/* STEP 1 */}
               {formStep === 1 && (
-                <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-6">
-                  <h3 className="text-xl font-bold font-serif text-[#0F2A23]">{t.booking.step1Title}</h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <motion.div initial={{ opacity: 0, x: 15 }} animate={{ opacity: 1, x: 0 }} className="space-y-4 sm:space-y-6">
+                  <h3 className="text-lg sm:text-xl font-bold font-serif text-[#0F2A23]">{t.booking.step1Title}</h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                     {t.booking.eventTypes.map((item) => (
                       <div
                         key={item.id}
                         onClick={() => setFormData({ ...formData, eventType: item.id })}
-                        className={`cursor-pointer p-5 rounded-2xl border-2 transition-all flex items-center gap-4 ${
+                        className={`cursor-pointer p-4 sm:p-5 rounded-xl sm:rounded-2xl border-2 transition-all flex items-center gap-3 sm:gap-4 ${
                           formData.eventType === item.id
                             ? 'bg-[#FAF8F5] border-[#0F2A23] shadow-md'
                             : 'bg-white border-gray-200 hover:border-[#D4AF37]'
                         }`}
                       >
-                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${formData.eventType === item.id ? 'bg-[#0F2A23] text-[#D4AF37]' : 'bg-gray-100 text-[#0F2A23]'}`}>
+                        <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center shrink-0 ${formData.eventType === item.id ? 'bg-[#0F2A23] text-[#D4AF37]' : 'bg-gray-100 text-[#0F2A23]'}`}>
                           <Icon name={item.icon} className="w-5 h-5" />
                         </div>
-                        <span className="font-bold text-sm text-[#0F2A23]">{item.label}</span>
+                        <span className="font-bold text-xs sm:text-sm text-[#0F2A23]">{item.label}</span>
                       </div>
                     ))}
                   </div>
@@ -963,8 +965,8 @@ function App() {
 
               {/* STEP 2 */}
               {formStep === 2 && (
-                <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-6">
-                  <h3 className="text-xl font-bold font-serif text-[#0F2A23]">{t.booking.step2Title}</h3>
+                <motion.div initial={{ opacity: 0, x: 15 }} animate={{ opacity: 1, x: 0 }} className="space-y-4 sm:space-y-6">
+                  <h3 className="text-lg sm:text-xl font-bold font-serif text-[#0F2A23]">{t.booking.step2Title}</h3>
                   <div className="space-y-4">
                     <div>
                       <label className="block text-xs font-bold text-[#0F2A23] mb-2">{t.booking.dateLabel}</label>
@@ -972,7 +974,7 @@ function App() {
                         type="date"
                         value={formData.eventDate}
                         onChange={(e) => setFormData({ ...formData, eventDate: e.target.value })}
-                        className="w-full p-4 rounded-xl bg-[#F8F9FA] border border-gray-300 text-[#1A1A1A] focus:border-[#0F2A23] outline-none"
+                        className="w-full p-3.5 sm:p-4 rounded-xl bg-[#F8F9FA] border border-gray-300 text-sm sm:text-base text-[#1A1A1A] focus:border-[#0F2A23] outline-none"
                       />
                     </div>
                     <div>
@@ -980,7 +982,7 @@ function App() {
                       <select
                         value={formData.location}
                         onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                        className="w-full p-4 rounded-xl bg-[#F8F9FA] border border-gray-300 text-[#1A1A1A] focus:border-[#0F2A23] outline-none"
+                        className="w-full p-3.5 sm:p-4 rounded-xl bg-[#F8F9FA] border border-gray-300 text-sm sm:text-base text-[#1A1A1A] focus:border-[#0F2A23] outline-none"
                       >
                         {t.booking.emirates.map((em, idx) => (
                           <option key={idx} value={em}>{em}</option>
@@ -993,18 +995,18 @@ function App() {
 
               {/* STEP 3 */}
               {formStep === 3 && (
-                <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-6">
-                  <h3 className="text-xl font-bold font-serif text-[#0F2A23]">{t.booking.step3Title}</h3>
+                <motion.div initial={{ opacity: 0, x: 15 }} animate={{ opacity: 1, x: 0 }} className="space-y-4 sm:space-y-6">
+                  <h3 className="text-lg sm:text-xl font-bold font-serif text-[#0F2A23]">{t.booking.step3Title}</h3>
                   <div className="space-y-4">
                     <div>
                       <label className="block text-xs font-bold text-[#0F2A23] mb-2">{t.booking.capacityLabel}</label>
-                      <div className="grid grid-cols-3 gap-3">
+                      <div className="grid grid-cols-3 gap-2 sm:gap-3">
                         {t.booking.capacityOptions.map((cap, cIdx) => (
                           <button
                             type="button"
                             key={cIdx}
                             onClick={() => setFormData({ ...formData, capacity: cap })}
-                            className={`p-3 rounded-xl border text-xs font-bold transition-all ${
+                            className={`p-2.5 sm:p-3 rounded-xl border text-[11px] sm:text-xs font-bold transition-all ${
                               formData.capacity === cap
                                 ? 'bg-[#0F2A23] text-[#D4AF37] border-[#0F2A23]'
                                 : 'bg-[#F8F9FA] text-[#555] border-gray-200'
@@ -1016,9 +1018,9 @@ function App() {
                       </div>
                     </div>
 
-                    <div className="pt-4">
+                    <div className="pt-2 sm:pt-4">
                       <label className="block text-xs font-bold text-[#0F2A23] mb-2">{t.booking.addonsLabel}</label>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
                         {t.booking.addons.map((addon) => {
                           const checked = formData.addons.includes(addon.id);
                           return (
@@ -1030,11 +1032,11 @@ function App() {
                                   : [...formData.addons, addon.id];
                                 setFormData({ ...formData, addons: newAddons });
                               }}
-                              className={`cursor-pointer p-4 rounded-xl border transition-all flex items-center gap-3 ${
+                              className={`cursor-pointer p-3.5 sm:p-4 rounded-xl border transition-all flex items-center gap-3 ${
                                 checked ? 'bg-[#FAF8F5] border-[#0F2A23]' : 'bg-[#F8F9FA] border-gray-200'
                               }`}
                             >
-                              <div className={`w-5 h-5 rounded flex items-center justify-center border ${checked ? 'bg-[#0F2A23] border-[#0F2A23] text-[#D4AF37]' : 'border-gray-300'}`}>
+                              <div className={`w-5 h-5 rounded flex items-center justify-center border shrink-0 ${checked ? 'bg-[#0F2A23] border-[#0F2A23] text-[#D4AF37]' : 'border-gray-300'}`}>
                                 {checked && <Icon name="Check" className="w-3.5 h-3.5" />}
                               </div>
                               <span className="text-xs font-bold text-[#0F2A23]">{addon.label}</span>
@@ -1049,9 +1051,9 @@ function App() {
 
               {/* STEP 4 */}
               {formStep === 4 && (
-                <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-6">
-                  <h3 className="text-xl font-bold font-serif text-[#0F2A23]">{t.booking.step4Title}</h3>
-                  <div className="space-y-4">
+                <motion.div initial={{ opacity: 0, x: 15 }} animate={{ opacity: 1, x: 0 }} className="space-y-4 sm:space-y-6">
+                  <h3 className="text-lg sm:text-xl font-bold font-serif text-[#0F2A23]">{t.booking.step4Title}</h3>
+                  <div className="space-y-3.5 sm:space-y-4">
                     <div>
                       <label className="block text-xs font-bold text-[#0F2A23] mb-1">{t.booking.nameLabel}</label>
                       <input
@@ -1059,7 +1061,7 @@ function App() {
                         placeholder={t.booking.namePlaceholder}
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        className="w-full p-4 rounded-xl bg-[#F8F9FA] border border-gray-300 text-[#1A1A1A] outline-none"
+                        className="w-full p-3.5 sm:p-4 rounded-xl bg-[#F8F9FA] border border-gray-300 text-sm text-[#1A1A1A] outline-none"
                       />
                     </div>
                     <div>
@@ -1069,7 +1071,7 @@ function App() {
                         placeholder={t.booking.phonePlaceholder}
                         value={formData.phone}
                         onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                        className="w-full p-4 rounded-xl bg-[#F8F9FA] border border-gray-300 text-[#1A1A1A] outline-none"
+                        className="w-full p-3.5 sm:p-4 rounded-xl bg-[#F8F9FA] border border-gray-300 text-sm text-[#1A1A1A] outline-none"
                       />
                     </div>
                     <div>
@@ -1079,7 +1081,7 @@ function App() {
                         placeholder={t.booking.notesPlaceholder}
                         value={formData.notes}
                         onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                        className="w-full p-4 rounded-xl bg-[#F8F9FA] border border-gray-300 text-[#1A1A1A] outline-none"
+                        className="w-full p-3.5 sm:p-4 rounded-xl bg-[#F8F9FA] border border-gray-300 text-sm text-[#1A1A1A] outline-none"
                       />
                     </div>
                   </div>
@@ -1087,12 +1089,12 @@ function App() {
               )}
 
               {/* Navigation Buttons */}
-              <div className="pt-8 flex items-center justify-between gap-4">
+              <div className="pt-6 sm:pt-8 flex items-center justify-between gap-3">
                 {formStep > 1 ? (
                   <button
                     type="button"
                     onClick={() => setFormStep(formStep - 1)}
-                    className="px-6 py-3 rounded-full border border-gray-300 text-[#0F2A23] text-xs font-bold hover:bg-gray-100"
+                    className="px-5 py-3 rounded-full border border-gray-300 text-[#0F2A23] text-xs font-bold hover:bg-gray-100 active:scale-95"
                   >
                     {t.booking.btnBack}
                   </button>
@@ -1102,14 +1104,14 @@ function App() {
                   <button
                     type="button"
                     onClick={() => setFormStep(formStep + 1)}
-                    className="px-8 py-3.5 rounded-full bg-[#0F2A23] text-[#D4AF37] font-bold text-xs hover:bg-[#16382F]"
+                    className="px-7 py-3.5 rounded-full bg-[#0F2A23] text-[#D4AF37] font-bold text-xs hover:bg-[#16382F] active:scale-95"
                   >
                     {t.booking.btnNext}
                   </button>
                 ) : (
                   <button
                     type="submit"
-                    className="px-8 py-4 rounded-full bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-sm shadow-xl flex items-center gap-2"
+                    className="w-full sm:w-auto px-8 py-4 rounded-full bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-sm shadow-xl flex items-center justify-center gap-2 active:scale-95 transition-transform"
                   >
                     <Icon name="MessageCircle" className="w-5 h-5" />
                     <span>{t.booking.btnSubmitWhatsApp}</span>
@@ -1124,36 +1126,37 @@ function App() {
       </section>
 
       {/* CONTACT & FOOTER */}
-      <footer id="contact" className="py-16 px-4 sm:px-6 lg:px-8 bg-[#0F2A23] text-[#FAF8F5]">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-12 pb-12 border-b border-white/10">
+      <footer id="contact" className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 bg-[#0F2A23] text-[#FAF8F5]">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 sm:gap-12 pb-10 sm:pb-12 border-b border-white/10">
           
-          <div className="md:col-span-5 space-y-4">
+          <div className="md:col-span-5 space-y-3 sm:space-y-4">
             <div className="flex items-center gap-3">
-              <DallahLogo className="w-12 h-12" />
+              <DallahLogo className="w-10 h-10 sm:w-12 sm:h-12" />
               <div>
-                <h3 className="text-2xl font-bold font-serif text-[#F7E7A9]">{t.nav.brandName}</h3>
-                <p className="text-xs text-[#D4AF37]">{t.nav.brandSub}</p>
+                <h3 className="text-xl sm:text-2xl font-bold font-serif text-[#F7E7A9]">{t.nav.brandName}</h3>
+                <p className="text-[10px] sm:text-xs text-[#D4AF37]">{t.nav.brandSub}</p>
               </div>
             </div>
-            <p className="text-sm text-[#FAF8F5]/70 leading-relaxed max-w-sm">
+            <p className="text-xs sm:text-sm text-[#FAF8F5]/70 leading-relaxed max-w-sm">
               {t.contact.tagline}
             </p>
           </div>
 
-          <div className="md:col-span-4 space-y-4">
-            <h4 className="text-sm font-bold font-serif text-[#D4AF37] uppercase tracking-wider">
+          <div className="md:col-span-4 space-y-3 sm:space-y-4">
+            <h4 className="text-xs sm:text-sm font-bold font-serif text-[#D4AF37] uppercase tracking-wider">
               {t.contact.title}
             </h4>
 
-            <div className="space-y-3">
+            <div className="space-y-2.5 sm:space-y-3">
               <div className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/10">
                 <div>
-                  <div className="text-xs text-[#FAF8F5]/60">{t.contact.bookingDesk}</div>
-                  <div className="text-sm font-bold text-[#F7E7A9]">+971 50 667 2259</div>
+                  <div className="text-[11px] text-[#FAF8F5]/60">{t.contact.bookingDesk}</div>
+                  <div className="text-xs sm:text-sm font-bold text-[#F7E7A9]">+971 50 667 2259</div>
                 </div>
                 <button
                   onClick={() => copyToClipboard('+971506672259')}
-                  className="p-2 text-[#D4AF37] hover:bg-white/10 rounded-lg"
+                  className="p-2 text-[#D4AF37] hover:bg-white/10 rounded-lg active:scale-95"
+                  aria-label="Copy booking phone"
                 >
                   <Icon name="Copy" className="w-4 h-4" />
                 </button>
@@ -1161,12 +1164,13 @@ function App() {
 
               <div className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/10">
                 <div>
-                  <div className="text-xs text-[#FAF8F5]/60">{t.contact.vipLine}</div>
-                  <div className="text-sm font-bold text-[#D4AF37]">+971 55 559 3389</div>
+                  <div className="text-[11px] text-[#FAF8F5]/60">{t.contact.vipLine}</div>
+                  <div className="text-xs sm:text-sm font-bold text-[#D4AF37]">+971 55 559 3389</div>
                 </div>
                 <button
                   onClick={() => copyToClipboard('+971555593389')}
-                  className="p-2 text-[#D4AF37] hover:bg-white/10 rounded-lg"
+                  className="p-2 text-[#D4AF37] hover:bg-white/10 rounded-lg active:scale-95"
+                  aria-label="Copy VIP phone"
                 >
                   <Icon name="Copy" className="w-4 h-4" />
                 </button>
@@ -1184,12 +1188,12 @@ function App() {
             </div>
           </div>
 
-          <div className="md:col-span-3 space-y-4">
-            <h4 className="text-sm font-bold font-serif text-[#D4AF37] uppercase tracking-wider">
+          <div className="md:col-span-3 space-y-3 sm:space-y-4">
+            <h4 className="text-xs sm:text-sm font-bold font-serif text-[#D4AF37] uppercase tracking-wider">
               {t.contact.hoursTitle}
             </h4>
 
-            <div className="space-y-3 text-xs text-[#FAF8F5]/80">
+            <div className="space-y-2.5 text-xs text-[#FAF8F5]/80">
               <div className="flex items-center gap-2">
                 <Icon name="Clock" className="w-4 h-4 text-[#D4AF37]" />
                 <span>{t.contact.hoursVal}</span>
@@ -1203,9 +1207,9 @@ function App() {
 
         </div>
 
-        <div className="max-w-7xl mx-auto pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-[#FAF8F5]/50 gap-4">
+        <div className="max-w-7xl mx-auto pt-6 sm:pt-8 flex flex-col sm:flex-row items-center justify-between text-[11px] sm:text-xs text-[#FAF8F5]/50 gap-3 sm:gap-4 text-center sm:text-start">
           <div>{t.contact.copyright}</div>
-          <div className="flex items-center gap-6">
+          <div className="flex items-center justify-center gap-4 sm:gap-6">
             <a href="#about" className="hover:text-[#D4AF37]">{t.nav.about}</a>
             <a href="#services" className="hover:text-[#D4AF37]">{t.nav.services}</a>
             <a href="#booking" className="hover:text-[#D4AF37]">{t.nav.booking}</a>
@@ -1214,7 +1218,7 @@ function App() {
       </footer>
 
       {/* FLOATING ACTION BUTTONS */}
-      <div className="fixed bottom-6 right-6 z-40 flex flex-col items-end gap-3">
+      <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 flex flex-col items-end gap-2.5 sm:gap-3">
         <AnimatePresence>
           {showBackToTop && (
             <motion.button
@@ -1222,9 +1226,10 @@ function App() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.8 }}
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-              className="p-3 rounded-full bg-[#0F2A23] border border-[#D4AF37] text-[#D4AF37] shadow-xl hover:bg-[#D4AF37] hover:text-[#0F2A23] transition-colors"
+              className="p-2.5 sm:p-3 rounded-full bg-[#0F2A23] border border-[#D4AF37] text-[#D4AF37] shadow-xl hover:bg-[#D4AF37] hover:text-[#0F2A23] transition-colors active:scale-95"
+              aria-label="Back to Top"
             >
-              <Icon name="ArrowUp" className="w-5 h-5" />
+              <Icon name="ArrowUp" className="w-4 h-4 sm:w-5 sm:h-5" />
             </motion.button>
           )}
         </AnimatePresence>
@@ -1233,10 +1238,11 @@ function App() {
           href="https://wa.me/971506672259"
           target="_blank"
           rel="noopener noreferrer"
-          className="relative p-4 rounded-full bg-[#25D366] text-white shadow-2xl hover:scale-110 transition-transform group flex items-center justify-center"
+          className="relative p-3.5 sm:p-4 rounded-full bg-[#25D366] text-white shadow-2xl hover:scale-110 active:scale-95 transition-transform group flex items-center justify-center"
+          aria-label="Contact VIP WhatsApp"
         >
-          <span className="absolute inset-0 rounded-full bg-[#25D366] animate-ping opacity-30" />
-          <Icon name="MessageCircle" className="w-7 h-7 relative z-10" />
+          <span className="absolute inset-0 rounded-full bg-[#25D366] animate-ping opacity-30 pointer-events-none" />
+          <Icon name="MessageCircle" className="w-6 h-6 sm:w-7 sm:h-7 relative z-10" />
         </a>
       </div>
 

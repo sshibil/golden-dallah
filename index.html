@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" class="scroll-smooth">
+<html lang="ar" dir="rtl" class="scroll-smooth overflow-x-hidden">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <title>الدلة الذهبية لخدمات الأفراح | Golden Dallah Wedding Services</title>
   
   <meta name="description" content="الدلة الذهبية لخدمات الأفراح - تموين الأعراس والمناسبات الفاخرة، تقديم القهوة العربية والضيافة الإماراتية الأصيلة منذ عام 1998 في كافة إمارات الدولة." />
@@ -54,9 +54,14 @@
   <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.dev.js"></script>
 
   <style>
-    /* Custom Luxury Glassmorphism & Light Scrollbar Styles */
+    /* Custom Luxury Glassmorphism & Mobile Optimized Scrollbar */
+    html, body {
+      overflow-x: hidden;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
     ::-webkit-scrollbar {
-      width: 8px;
+      width: 6px;
     }
     ::-webkit-scrollbar-track {
       background: #F8F9FA;
@@ -76,7 +81,7 @@
     }
   </style>
 </head>
-<body class="bg-white text-[#1A1A1A]">
+<body class="bg-white text-[#1A1A1A] overflow-x-hidden">
 
   <div id="root"></div>
 

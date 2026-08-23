@@ -1,4 +1,4 @@
-// Golden Dallah Wedding Services - React Application (Fix Text Scroll Updates & Smooth Hero Animation)
+// Golden Dallah Wedding Services - React Application (Guaranteed Scroll-Based Text Overlay Transitions)
 
 const { useState, useEffect, useRef } = React;
 const e = React.createElement;
@@ -77,7 +77,7 @@ const DallahLogo = ({ className = "w-10 h-10" }) =>
     e('circle', { cx: "50", cy: "7", r: "3", fill: "url(#goldGlow)" })
   );
 
-// ULTRA-RESPONSIVE HERO SCROLL CANVAS & TEXT STAGE ANIMATION COMPONENT
+// GUARANTEED SCROLL-BASED HERO ANIMATION & TEXT COMPONENT
 function HeroScrollCanvas({ t, isRtl }) {
   const containerRef = useRef(null);
   const canvasRef = useRef(null);
@@ -204,7 +204,36 @@ function HeroScrollCanvas({ t, isRtl }) {
     ctx.restore();
   };
 
-  // Continuous Animation & Text Scroll Loop
+  // 1. Direct Scroll Event Listener (Guarantees Instant React State Text Updates on Scroll)
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!containerRef.current || isPlayingCinema) return;
+      const rect = containerRef.current.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+      const totalScrollableHeight = rect.height - windowHeight;
+
+      if (totalScrollableHeight > 0) {
+        const currentScroll = Math.max(0, -rect.top);
+        const progress = Math.min(1, Math.max(0, currentScroll / totalScrollableHeight));
+        
+        targetFrameRef.current = progress * (TOTAL_FRAMES - 1);
+        setScrollProgressPercent(Math.round(progress * 100));
+
+        const stage = 
+          progress < 0.22 ? 0 :
+          progress < 0.48 ? 1 :
+          progress < 0.75 ? 2 : 3;
+
+        setActiveStageIndex(stage);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [isPlayingCinema]);
+
+  // 2. High-Frequency 60FPS Canvas Render Loop (Lerp + Cinema Mode)
   useEffect(() => {
     let lastTime = performance.now();
 
@@ -218,32 +247,15 @@ function HeroScrollCanvas({ t, isRtl }) {
 
           const progress = cinemaFrameRef.current / (TOTAL_FRAMES - 1);
           setScrollProgressPercent(Math.round(progress * 100));
+
           const stage = progress < 0.22 ? 0 : progress < 0.48 ? 1 : progress < 0.75 ? 2 : 3;
           setActiveStageIndex(stage);
         }
       } else {
-        if (containerRef.current) {
-          const rect = containerRef.current.getBoundingClientRect();
-          const windowHeight = window.innerHeight;
-          const totalScrollableHeight = rect.height - windowHeight;
-
-          if (totalScrollableHeight > 0) {
-            const currentScroll = Math.max(0, -rect.top);
-            const progress = Math.min(1, Math.max(0, currentScroll / totalScrollableHeight));
-            targetFrameRef.current = progress * (TOTAL_FRAMES - 1);
-
-            // Always update progress percentage and active text stage
-            setScrollProgressPercent(Math.round(progress * 100));
-            const stage = progress < 0.22 ? 0 : progress < 0.48 ? 1 : progress < 0.75 ? 2 : 3;
-            setActiveStageIndex((prev) => (prev !== stage ? stage : prev));
-
-            // Smooth Lerp canvas rendering
-            const diff = targetFrameRef.current - currentFrameRef.current;
-            if (Math.abs(diff) > 0.01) {
-              currentFrameRef.current += diff * 0.25;
-              drawFrame(currentFrameRef.current);
-            }
-          }
+        const diff = targetFrameRef.current - currentFrameRef.current;
+        if (Math.abs(diff) > 0.01) {
+          currentFrameRef.current += diff * 0.25;
+          drawFrame(currentFrameRef.current);
         }
       }
 

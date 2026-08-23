@@ -1,4 +1,4 @@
-// Golden Dallah Wedding Services - React Application (Restored Original Canvas Animation & Mobile Optimized)
+// Golden Dallah Wedding Services - React Application (Masterpiece Arabic Coffee Animation & Mobile Perfection)
 
 const { useState, useEffect, useRef } = React;
 const e = React.createElement;
@@ -44,7 +44,9 @@ const Icon = ({ name, className = "w-5 h-5", ...props }) => {
     MapPin: () => e('svg', svgProps, e('path', { strokeLinecap: "round", strokeLinejoin: "round", d: "M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" }), e('path', { strokeLinecap: "round", strokeLinejoin: "round", d: "M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" })),
     Clock: () => e('svg', svgProps, e('path', { strokeLinecap: "round", strokeLinejoin: "round", d: "M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" })),
     Copy: () => e('svg', svgProps, e('path', { strokeLinecap: "round", strokeLinejoin: "round", d: "M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5" })),
-    ArrowUp: () => e('svg', { ...svgProps, strokeWidth: "2" }, e('path', { strokeLinecap: "round", strokeLinejoin: "round", d: "M4.5 12.75l7.5-7.5 7.5 7.5m-15 6l7.5-7.5 7.5 7.5" }))
+    ArrowUp: () => e('svg', { ...svgProps, strokeWidth: "2" }, e('path', { strokeLinecap: "round", strokeLinejoin: "round", d: "M4.5 12.75l7.5-7.5 7.5 7.5m-15 6l7.5-7.5 7.5 7.5" })),
+    Play: () => e('svg', { ...svgProps, strokeWidth: "2" }, e('path', { strokeLinecap: "round", strokeLinejoin: "round", d: "M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" })),
+    Pause: () => e('svg', { ...svgProps, strokeWidth: "2" }, e('path', { strokeLinecap: "round", strokeLinejoin: "round", d: "M15.75 5.25v13.5m-7.5-13.5v13.5" }))
   };
 
   const Component = icons[name] || icons.Sparkles;
@@ -75,116 +77,220 @@ const DallahLogo = ({ className = "w-10 h-10" }) =>
     e('circle', { cx: "50", cy: "7", r: "3", fill: "url(#goldGlow)" })
   );
 
-// ORIGINAL HERO SCROLL CANVAS COMPONENT
+// MASTERPIECE ULTRA-SMOOTH ARABIC COFFEE ANIMATION COMPONENT
 function HeroScrollCanvas({ t, isRtl }) {
   const containerRef = useRef(null);
   const canvasRef = useRef(null);
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const [imagesLoaded, setImagesLoaded] = useState(false);
+  const [activeStageIndex, setActiveStageIndex] = useState(0);
+  const [loadProgress, setLoadProgress] = useState(0);
+  const [isFullyLoaded, setIsFullyLoaded] = useState(false);
+  const [isPlayingCinema, setIsPlayingCinema] = useState(false);
+  
   const imagesRef = useRef([]);
+  const animFrameIdRef = useRef(null);
+  const targetFrameRef = useRef(0);
+  const currentFrameRef = useRef(0);
+  const cinemaFrameRef = useRef(0);
+  const particlesRef = useRef([]);
   const TOTAL_FRAMES = 299;
 
-  // Preload 299 high-definition image frames into memory
+  // 1. Preload 299 frames + initialize steam particles
   useEffect(() => {
-    let loadedCount = 0;
+    let count = 0;
     const loadedImages = [];
+
+    const particles = [];
+    for (let p = 0; p < 25; p++) {
+      particles.push({
+        x: Math.random() * (window.innerWidth || 1000),
+        y: Math.random() * (window.innerHeight || 800),
+        size: Math.random() * 2.5 + 1,
+        speedY: Math.random() * 0.7 + 0.3,
+        opacity: Math.random() * 0.4 + 0.15
+      });
+    }
+    particlesRef.current = particles;
 
     for (let i = 1; i <= TOTAL_FRAMES; i++) {
       const img = new Image();
       const frameNum = String(i).padStart(3, '0');
       img.src = `public/images/herosection/ezgif-frame-${frameNum}.jpg`;
       img.onload = () => {
-        loadedCount++;
-        if (loadedCount === TOTAL_FRAMES) {
-          setImagesLoaded(true);
+        img.isLoaded = true;
+        count++;
+        const pct = Math.round((count / TOTAL_FRAMES) * 100);
+        setLoadProgress(pct);
+        if (count === TOTAL_FRAMES) {
+          setIsFullyLoaded(true);
         }
+      };
+      img.onerror = () => {
+        count++;
       };
       loadedImages.push(img);
     }
     imagesRef.current = loadedImages;
   }, []);
 
-  // Calculate scroll position inside sticky hero container
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!containerRef.current) return;
-      const rect = containerRef.current.getBoundingClientRect();
-      const windowHeight = window.innerHeight;
-      const totalScrollableHeight = rect.height - windowHeight;
-      if (totalScrollableHeight <= 0) return;
-
-      const currentScroll = Math.max(0, -rect.top);
-      const progress = Math.min(1, Math.max(0, currentScroll / totalScrollableHeight));
-      setScrollProgress(progress);
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  // Render High Quality Canvas Frame
-  useEffect(() => {
-    if (!canvasRef.current || imagesRef.current.length === 0) return;
+  // 2. Ultra-Smooth High-DPI Canvas Draw Engine with Lerp Easing & Golden Steam
+  const drawFrame = (frameIdx) => {
     const canvas = canvasRef.current;
+    if (!canvas) return;
     const ctx = canvas.getContext('2d');
+    const images = imagesRef.current;
+    if (!images || images.length === 0) return;
 
-    const frameIndex = Math.min(
-      TOTAL_FRAMES - 1,
-      Math.max(0, Math.floor(scrollProgress * (TOTAL_FRAMES - 1)))
-    );
+    const roundedIdx = Math.min(TOTAL_FRAMES - 1, Math.max(0, Math.round(frameIdx)));
+    let targetImg = images[roundedIdx];
 
-    const img = imagesRef.current[frameIndex];
-    if (img && img.complete) {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      const displayWidth = window.innerWidth;
-      const displayHeight = window.innerHeight;
+    if (!targetImg || !targetImg.isLoaded) {
+      for (let d = 1; d < TOTAL_FRAMES; d++) {
+        const prev = images[roundedIdx - d];
+        if (prev && prev.isLoaded) { targetImg = prev; break; }
+        const next = images[roundedIdx + d];
+        if (next && next.isLoaded) { targetImg = next; break; }
+      }
+    }
 
+    if (!targetImg || !targetImg.complete) return;
+
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const displayWidth = window.innerWidth;
+    const displayHeight = window.innerHeight;
+
+    if (canvas.width !== displayWidth * dpr || canvas.height !== displayHeight * dpr) {
       canvas.width = displayWidth * dpr;
       canvas.height = displayHeight * dpr;
-
-      ctx.scale(dpr, dpr);
-      ctx.imageSmoothingEnabled = true;
-      ctx.imageSmoothingQuality = 'high';
-
-      // Draw image filling fullscreen viewport with aspect-cover
-      const hRatio = displayWidth / img.width;
-      const vRatio = displayHeight / img.height;
-      const ratio = Math.max(hRatio, vRatio);
-      const centerShift_x = (displayWidth - img.width * ratio) / 2;
-      const centerShift_y = (displayHeight - img.height * ratio) / 2;
-
-      ctx.clearRect(0, 0, displayWidth, displayHeight);
-      ctx.drawImage(
-        img,
-        0,
-        0,
-        img.width,
-        img.height,
-        centerShift_x,
-        centerShift_y,
-        img.width * ratio,
-        img.height * ratio
-      );
     }
-  }, [scrollProgress, imagesLoaded]);
 
-  // Determine active feature overlay stage
-  const activeStageIndex = 
-    scrollProgress < 0.22 ? 0 :
-    scrollProgress < 0.48 ? 1 :
-    scrollProgress < 0.75 ? 2 : 3;
+    ctx.save();
+    ctx.scale(dpr, dpr);
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
+
+    const hRatio = displayWidth / targetImg.width;
+    const vRatio = displayHeight / targetImg.height;
+    const ratio = Math.max(hRatio, vRatio);
+    const centerShift_x = (displayWidth - targetImg.width * ratio) / 2;
+    const centerShift_y = (displayHeight - targetImg.height * ratio) / 2;
+
+    ctx.clearRect(0, 0, displayWidth, displayHeight);
+    ctx.drawImage(
+      targetImg,
+      0,
+      0,
+      targetImg.width,
+      targetImg.height,
+      centerShift_x,
+      centerShift_y,
+      targetImg.width * ratio,
+      targetImg.height * ratio
+    );
+
+    // Render Ambient Golden Steam Particles
+    if (particlesRef.current) {
+      particlesRef.current.forEach(p => {
+        p.y -= p.speedY;
+        if (p.y < 0) {
+          p.y = displayHeight + 10;
+          p.x = Math.random() * displayWidth;
+        }
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(212, 175, 55, ${p.opacity})`;
+        ctx.fill();
+      });
+    }
+
+    ctx.restore();
+  };
+
+  // 3. Smooth Lerp & Auto Cinema Playback Animation Loop
+  useEffect(() => {
+    let lastTime = performance.now();
+
+    const loop = (now) => {
+      if (isPlayingCinema) {
+        if (now - lastTime > 33) { // ~30 FPS cinema playback
+          cinemaFrameRef.current = (cinemaFrameRef.current + 1) % TOTAL_FRAMES;
+          currentFrameRef.current = cinemaFrameRef.current;
+          drawFrame(cinemaFrameRef.current);
+          lastTime = now;
+
+          const progress = cinemaFrameRef.current / (TOTAL_FRAMES - 1);
+          const stage = progress < 0.22 ? 0 : progress < 0.48 ? 1 : progress < 0.75 ? 2 : 3;
+          setActiveStageIndex(stage);
+        }
+      } else {
+        if (containerRef.current) {
+          const rect = containerRef.current.getBoundingClientRect();
+          const windowHeight = window.innerHeight;
+          const totalScrollableHeight = rect.height - windowHeight;
+
+          if (totalScrollableHeight > 0) {
+            const currentScroll = Math.max(0, -rect.top);
+            const progress = Math.min(1, Math.max(0, currentScroll / totalScrollableHeight));
+            targetFrameRef.current = progress * (TOTAL_FRAMES - 1);
+
+            // Silky Easing (0.18 lerp multiplier)
+            const diff = targetFrameRef.current - currentFrameRef.current;
+            if (Math.abs(diff) > 0.05) {
+              currentFrameRef.current += diff * 0.18;
+              drawFrame(currentFrameRef.current);
+            }
+
+            const stage = progress < 0.22 ? 0 : progress < 0.48 ? 1 : progress < 0.75 ? 2 : 3;
+            setActiveStageIndex(stage);
+          }
+        }
+      }
+
+      animFrameIdRef.current = requestAnimationFrame(loop);
+    };
+
+    animFrameIdRef.current = requestAnimationFrame(loop);
+    return () => cancelAnimationFrame(animFrameIdRef.current);
+  }, [isPlayingCinema]);
+
+  const currentProgressPct = Math.round((currentFrameRef.current / (TOTAL_FRAMES - 1)) * 100);
 
   return e('div', { ref: containerRef, className: "relative h-[340vh] sm:h-[360vh] bg-black" },
+    
+    // Sticky Fullscreen Animation Viewport
     e('div', { className: "sticky top-0 h-screen w-full overflow-hidden flex items-end justify-center pb-6 sm:pb-12" },
+      
+      // Canvas Backing
       e('canvas', { ref: canvasRef, className: "absolute inset-0 w-full h-full object-cover z-0" }),
+
+      // Soft Luxury Gradient Overlays
       e('div', { className: "absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 to-black/40 pointer-events-none z-10" }),
+
+      // Progress Line Top Indicator
       e('div', { className: "absolute top-16 sm:top-20 left-0 right-0 h-1 sm:h-1.5 bg-white/10 z-30" },
         e('div', { 
-          className: "h-full bg-gradient-to-r from-[#D4AF37] via-[#F7E7A9] to-[#D4AF37] transition-all duration-150",
-          style: { width: `${scrollProgress * 100}%` }
+          className: "h-full bg-gradient-to-r from-[#D4AF37] via-[#F7E7A9] to-[#D4AF37] transition-all duration-75",
+          style: { width: `${currentProgressPct}%` }
         })
       ),
+
+      // Floating Mode Controls (Scroll vs Auto Cinema Playback)
+      e('div', { className: "absolute top-20 sm:top-24 right-4 sm:right-8 z-30 flex items-center gap-2" },
+        e('button', {
+          onClick: () => setIsPlayingCinema(!isPlayingCinema),
+          className: "px-3.5 py-1.5 rounded-full bg-[#0F2A23]/90 backdrop-blur-md border border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37] hover:text-[#0F2A23] transition-all flex items-center gap-2 text-xs font-bold shadow-xl active:scale-95"
+        },
+          e(Icon, { name: isPlayingCinema ? "Pause" : "Play", className: "w-3.5 h-3.5" }),
+          e('span', null, isPlayingCinema ? "Cinema Mode: ON" : "Auto Cinema Play")
+        )
+      ),
+
+      // Background Preloader Badge (Visible while images are downloading)
+      !isFullyLoaded && e('div', { className: "absolute top-20 sm:top-24 left-4 sm:left-8 z-30 bg-[#0F2A23]/80 backdrop-blur-md px-3 py-1 rounded-full border border-[#D4AF37]/50 text-[#F7E7A9] text-[10px] sm:text-xs font-bold flex items-center gap-2" },
+        e(DallahLogo, { className: "w-4 h-4 animate-spin" }),
+        e('span', null, `Loading Coffee Animation: ${loadProgress}%`)
+      ),
+
+      // Dynamic Glassmorphic Feature Overlay Cards
       e('div', { className: "relative z-20 max-w-4xl mx-auto px-4 w-full text-center" },
         e(AnimatePresence, { mode: "wait" },
           activeStageIndex === 0 && e(motion.div, {
@@ -192,7 +298,7 @@ function HeroScrollCanvas({ t, isRtl }) {
             initial: { opacity: 0, y: 20 },
             animate: { opacity: 1, y: 0 },
             exit: { opacity: 0, y: -20 },
-            transition: { duration: 0.4 },
+            transition: { duration: 0.35 },
             className: "bg-[#0F2A23]/90 backdrop-blur-md p-5 sm:p-10 rounded-2xl sm:rounded-3xl border-2 border-[#D4AF37] shadow-2xl text-white space-y-3 sm:space-y-4"
           },
             e('div', { className: "inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-[#D4AF37] bg-[#D4AF37]/20" },
@@ -216,7 +322,7 @@ function HeroScrollCanvas({ t, isRtl }) {
             initial: { opacity: 0, scale: 0.95, y: 20 },
             animate: { opacity: 1, scale: 1, y: 0 },
             exit: { opacity: 0, scale: 0.95, y: -20 },
-            transition: { duration: 0.4 },
+            transition: { duration: 0.35 },
             className: "max-w-xl mx-auto bg-[#0F2A23]/95 backdrop-blur-md p-5 sm:p-8 rounded-2xl sm:rounded-3xl border-2 border-[#D4AF37] shadow-2xl text-white text-start space-y-2 sm:space-y-3"
           },
             e('div', { className: "inline-block px-3 py-1 rounded-full bg-[#D4AF37] text-[#0F2A23] text-[10px] sm:text-xs font-bold uppercase tracking-wider" }, t.hero.features[0].tag),
@@ -229,7 +335,7 @@ function HeroScrollCanvas({ t, isRtl }) {
             initial: { opacity: 0, scale: 0.95, y: 20 },
             animate: { opacity: 1, scale: 1, y: 0 },
             exit: { opacity: 0, scale: 0.95, y: -20 },
-            transition: { duration: 0.4 },
+            transition: { duration: 0.35 },
             className: "max-w-xl mx-auto bg-[#0F2A23]/95 backdrop-blur-md p-5 sm:p-8 rounded-2xl sm:rounded-3xl border-2 border-[#D4AF37] shadow-2xl text-white text-start space-y-2 sm:space-y-3"
           },
             e('div', { className: "inline-block px-3 py-1 rounded-full bg-[#D4AF37] text-[#0F2A23] text-[10px] sm:text-xs font-bold uppercase tracking-wider" }, t.hero.features[1].tag),
@@ -242,7 +348,7 @@ function HeroScrollCanvas({ t, isRtl }) {
             initial: { opacity: 0, scale: 0.95, y: 20 },
             animate: { opacity: 1, scale: 1, y: 0 },
             exit: { opacity: 0, scale: 0.95, y: -20 },
-            transition: { duration: 0.4 },
+            transition: { duration: 0.35 },
             className: "max-w-2xl mx-auto bg-[#0F2A23]/95 backdrop-blur-md p-5 sm:p-8 rounded-2xl sm:rounded-3xl border-2 border-[#D4AF37] shadow-2xl text-white space-y-3 sm:space-y-4"
           },
             e('div', { className: "inline-block px-3 py-1 rounded-full bg-[#D4AF37] text-[#0F2A23] text-[10px] sm:text-xs font-bold uppercase tracking-wider" }, t.hero.features[2].tag),

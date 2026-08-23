@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>الدلة الذهبية لخدمات الأفراح | Golden Dallah Wedding Services</title>
+  
+  <meta name="description" content="الدلة الذهبية لخدمات الأفراح - تموين الأعراس والمناسبات الفاخرة، تقديم القهوة العربية والضيافة الإماراتية الأصيلة منذ عام 1998 في كافة إمارات الدولة." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>☕</text></svg>">
+
+  <!-- Google Fonts: Amiri & Tajawal (Arabic), Playfair Display & Montserrat (English) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS v3 -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            emerald: {
+              DEFAULT: '#0F2A23',
+              dark: '#0A1C17',
+              light: '#16382F',
+              accent: '#1C453B'
+            },
+            gold: {
+              DEFAULT: '#D4AF37',
+              light: '#F7E7A9',
+              dark: '#AA7C11',
+              glow: '#FFE899'
+            },
+            ivory: '#FAF8F5',
+            offblack: '#101815'
+          },
+          fontFamily: {
+            serif: ['Playfair Display', 'Amiri', 'serif'],
+            arabic: ['Tajawal', 'Amiri', 'sans-serif'],
+            english: ['Montserrat', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- React 18 & Babel Standalone -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- Framer Motion -->
+  <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.dev.js"></script>
+
+  <style>
+    /* Custom Luxury Glassmorphism & Light Scrollbar Styles */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F8F9FA;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #D4AF37;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #0F2A23;
+    }
+
+    .gold-gradient-text {
+      background: linear-gradient(135deg, #AA7C11 0%, #D4AF37 50%, #8B6508 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  </style>
+</head>
+<body class="bg-white text-[#1A1A1A]">
+
+  <div id="root"></div>
+
+  <!-- Load Translations & React Main Script -->
+  <script src="translations.js"></script>
+  <script type="text/babel" src="app.js"></script>
+
+</body>
+</html>

@@ -1,4 +1,4 @@
-// Golden Dallah Wedding Services - React Application (Masterpiece Arabic Coffee Animation & Mobile Perfection)
+// Golden Dallah Wedding Services - React Application (Fix Text Scroll Updates & Smooth Hero Animation)
 
 const { useState, useEffect, useRef } = React;
 const e = React.createElement;
@@ -77,11 +77,12 @@ const DallahLogo = ({ className = "w-10 h-10" }) =>
     e('circle', { cx: "50", cy: "7", r: "3", fill: "url(#goldGlow)" })
   );
 
-// MASTERPIECE ULTRA-SMOOTH ARABIC COFFEE ANIMATION COMPONENT
+// ULTRA-RESPONSIVE HERO SCROLL CANVAS & TEXT STAGE ANIMATION COMPONENT
 function HeroScrollCanvas({ t, isRtl }) {
   const containerRef = useRef(null);
   const canvasRef = useRef(null);
   const [activeStageIndex, setActiveStageIndex] = useState(0);
+  const [scrollProgressPercent, setScrollProgressPercent] = useState(0);
   const [loadProgress, setLoadProgress] = useState(0);
   const [isFullyLoaded, setIsFullyLoaded] = useState(false);
   const [isPlayingCinema, setIsPlayingCinema] = useState(false);
@@ -94,7 +95,7 @@ function HeroScrollCanvas({ t, isRtl }) {
   const particlesRef = useRef([]);
   const TOTAL_FRAMES = 299;
 
-  // 1. Preload 299 frames + initialize steam particles
+  // Preload 299 frames + initialize steam particles
   useEffect(() => {
     let count = 0;
     const loadedImages = [];
@@ -124,15 +125,13 @@ function HeroScrollCanvas({ t, isRtl }) {
           setIsFullyLoaded(true);
         }
       };
-      img.onerror = () => {
-        count++;
-      };
+      img.onerror = () => { count++; };
       loadedImages.push(img);
     }
     imagesRef.current = loadedImages;
   }, []);
 
-  // 2. Ultra-Smooth High-DPI Canvas Draw Engine with Lerp Easing & Golden Steam
+  // Draw Frame Canvas Engine
   const drawFrame = (frameIdx) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -187,7 +186,7 @@ function HeroScrollCanvas({ t, isRtl }) {
       targetImg.height * ratio
     );
 
-    // Render Ambient Golden Steam Particles
+    // Steam particles
     if (particlesRef.current) {
       particlesRef.current.forEach(p => {
         p.y -= p.speedY;
@@ -205,19 +204,20 @@ function HeroScrollCanvas({ t, isRtl }) {
     ctx.restore();
   };
 
-  // 3. Smooth Lerp & Auto Cinema Playback Animation Loop
+  // Continuous Animation & Text Scroll Loop
   useEffect(() => {
     let lastTime = performance.now();
 
     const loop = (now) => {
       if (isPlayingCinema) {
-        if (now - lastTime > 33) { // ~30 FPS cinema playback
+        if (now - lastTime > 33) {
           cinemaFrameRef.current = (cinemaFrameRef.current + 1) % TOTAL_FRAMES;
           currentFrameRef.current = cinemaFrameRef.current;
           drawFrame(cinemaFrameRef.current);
           lastTime = now;
 
           const progress = cinemaFrameRef.current / (TOTAL_FRAMES - 1);
+          setScrollProgressPercent(Math.round(progress * 100));
           const stage = progress < 0.22 ? 0 : progress < 0.48 ? 1 : progress < 0.75 ? 2 : 3;
           setActiveStageIndex(stage);
         }
@@ -232,15 +232,17 @@ function HeroScrollCanvas({ t, isRtl }) {
             const progress = Math.min(1, Math.max(0, currentScroll / totalScrollableHeight));
             targetFrameRef.current = progress * (TOTAL_FRAMES - 1);
 
-            // Silky Easing (0.18 lerp multiplier)
+            // Always update progress percentage and active text stage
+            setScrollProgressPercent(Math.round(progress * 100));
+            const stage = progress < 0.22 ? 0 : progress < 0.48 ? 1 : progress < 0.75 ? 2 : 3;
+            setActiveStageIndex((prev) => (prev !== stage ? stage : prev));
+
+            // Smooth Lerp canvas rendering
             const diff = targetFrameRef.current - currentFrameRef.current;
-            if (Math.abs(diff) > 0.05) {
-              currentFrameRef.current += diff * 0.18;
+            if (Math.abs(diff) > 0.01) {
+              currentFrameRef.current += diff * 0.25;
               drawFrame(currentFrameRef.current);
             }
-
-            const stage = progress < 0.22 ? 0 : progress < 0.48 ? 1 : progress < 0.75 ? 2 : 3;
-            setActiveStageIndex(stage);
           }
         }
       }
@@ -252,28 +254,23 @@ function HeroScrollCanvas({ t, isRtl }) {
     return () => cancelAnimationFrame(animFrameIdRef.current);
   }, [isPlayingCinema]);
 
-  const currentProgressPct = Math.round((currentFrameRef.current / (TOTAL_FRAMES - 1)) * 100);
-
   return e('div', { ref: containerRef, className: "relative h-[340vh] sm:h-[360vh] bg-black" },
     
-    // Sticky Fullscreen Animation Viewport
+    // Sticky Viewport
     e('div', { className: "sticky top-0 h-screen w-full overflow-hidden flex items-end justify-center pb-6 sm:pb-12" },
       
-      // Canvas Backing
       e('canvas', { ref: canvasRef, className: "absolute inset-0 w-full h-full object-cover z-0" }),
-
-      // Soft Luxury Gradient Overlays
       e('div', { className: "absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 to-black/40 pointer-events-none z-10" }),
 
       // Progress Line Top Indicator
       e('div', { className: "absolute top-16 sm:top-20 left-0 right-0 h-1 sm:h-1.5 bg-white/10 z-30" },
         e('div', { 
           className: "h-full bg-gradient-to-r from-[#D4AF37] via-[#F7E7A9] to-[#D4AF37] transition-all duration-75",
-          style: { width: `${currentProgressPct}%` }
+          style: { width: `${scrollProgressPercent}%` }
         })
       ),
 
-      // Floating Mode Controls (Scroll vs Auto Cinema Playback)
+      // Cinema Play / Pause Button
       e('div', { className: "absolute top-20 sm:top-24 right-4 sm:right-8 z-30 flex items-center gap-2" },
         e('button', {
           onClick: () => setIsPlayingCinema(!isPlayingCinema),
@@ -284,13 +281,13 @@ function HeroScrollCanvas({ t, isRtl }) {
         )
       ),
 
-      // Background Preloader Badge (Visible while images are downloading)
+      // Preloader Badge
       !isFullyLoaded && e('div', { className: "absolute top-20 sm:top-24 left-4 sm:left-8 z-30 bg-[#0F2A23]/80 backdrop-blur-md px-3 py-1 rounded-full border border-[#D4AF37]/50 text-[#F7E7A9] text-[10px] sm:text-xs font-bold flex items-center gap-2" },
         e(DallahLogo, { className: "w-4 h-4 animate-spin" }),
         e('span', null, `Loading Coffee Animation: ${loadProgress}%`)
       ),
 
-      // Dynamic Glassmorphic Feature Overlay Cards
+      // Dynamic Text Overlay Cards (Always updating smoothly on scroll)
       e('div', { className: "relative z-20 max-w-4xl mx-auto px-4 w-full text-center" },
         e(AnimatePresence, { mode: "wait" },
           activeStageIndex === 0 && e(motion.div, {
@@ -298,7 +295,7 @@ function HeroScrollCanvas({ t, isRtl }) {
             initial: { opacity: 0, y: 20 },
             animate: { opacity: 1, y: 0 },
             exit: { opacity: 0, y: -20 },
-            transition: { duration: 0.35 },
+            transition: { duration: 0.3 },
             className: "bg-[#0F2A23]/90 backdrop-blur-md p-5 sm:p-10 rounded-2xl sm:rounded-3xl border-2 border-[#D4AF37] shadow-2xl text-white space-y-3 sm:space-y-4"
           },
             e('div', { className: "inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-[#D4AF37] bg-[#D4AF37]/20" },
@@ -322,7 +319,7 @@ function HeroScrollCanvas({ t, isRtl }) {
             initial: { opacity: 0, scale: 0.95, y: 20 },
             animate: { opacity: 1, scale: 1, y: 0 },
             exit: { opacity: 0, scale: 0.95, y: -20 },
-            transition: { duration: 0.35 },
+            transition: { duration: 0.3 },
             className: "max-w-xl mx-auto bg-[#0F2A23]/95 backdrop-blur-md p-5 sm:p-8 rounded-2xl sm:rounded-3xl border-2 border-[#D4AF37] shadow-2xl text-white text-start space-y-2 sm:space-y-3"
           },
             e('div', { className: "inline-block px-3 py-1 rounded-full bg-[#D4AF37] text-[#0F2A23] text-[10px] sm:text-xs font-bold uppercase tracking-wider" }, t.hero.features[0].tag),
@@ -335,7 +332,7 @@ function HeroScrollCanvas({ t, isRtl }) {
             initial: { opacity: 0, scale: 0.95, y: 20 },
             animate: { opacity: 1, scale: 1, y: 0 },
             exit: { opacity: 0, scale: 0.95, y: -20 },
-            transition: { duration: 0.35 },
+            transition: { duration: 0.3 },
             className: "max-w-xl mx-auto bg-[#0F2A23]/95 backdrop-blur-md p-5 sm:p-8 rounded-2xl sm:rounded-3xl border-2 border-[#D4AF37] shadow-2xl text-white text-start space-y-2 sm:space-y-3"
           },
             e('div', { className: "inline-block px-3 py-1 rounded-full bg-[#D4AF37] text-[#0F2A23] text-[10px] sm:text-xs font-bold uppercase tracking-wider" }, t.hero.features[1].tag),
@@ -348,7 +345,7 @@ function HeroScrollCanvas({ t, isRtl }) {
             initial: { opacity: 0, scale: 0.95, y: 20 },
             animate: { opacity: 1, scale: 1, y: 0 },
             exit: { opacity: 0, scale: 0.95, y: -20 },
-            transition: { duration: 0.35 },
+            transition: { duration: 0.3 },
             className: "max-w-2xl mx-auto bg-[#0F2A23]/95 backdrop-blur-md p-5 sm:p-8 rounded-2xl sm:rounded-3xl border-2 border-[#D4AF37] shadow-2xl text-white space-y-3 sm:space-y-4"
           },
             e('div', { className: "inline-block px-3 py-1 rounded-full bg-[#D4AF37] text-[#0F2A23] text-[10px] sm:text-xs font-bold uppercase tracking-wider" }, t.hero.features[2].tag),
@@ -1030,7 +1027,7 @@ function App() {
             ),
             e('div', { className: "flex items-start gap-2" },
               e(Icon, { name: "MapPin", className: "w-4 h-4 text-[#D4AF37] shrink-0 mt-0.5" }),
-              e('span', null, t.contact.locationVal)
+              e('span', null, t.locationVal || "UAE Nationwide Coverage")
             )
           )
         )

@@ -1,4 +1,4 @@
-// Golden Dallah Wedding Services - Pure JavaScript React Application (Compatible with Esbuild / Vite / Webpack / Netlify / Vercel)
+// Golden Dallah Wedding Services - React Application (Ultra-Smooth 60FPS Video Animation & Mobile Optimized)
 
 const { useState, useEffect, useRef } = React;
 const e = React.createElement;
@@ -75,27 +75,28 @@ const DallahLogo = ({ className = "w-10 h-10" }) =>
     e('circle', { cx: "50", cy: "7", r: "3", fill: "url(#goldGlow)" })
   );
 
-// FULL-BLEED FULLSCREEN HERO SCROLL CANVAS COMPONENT
+// ULTRA-SMOOTH 60FPS FULL-BLEED HERO SCROLL CANVAS COMPONENT
 function HeroScrollCanvas({ t, isRtl }) {
   const containerRef = useRef(null);
   const canvasRef = useRef(null);
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const [imagesLoaded, setImagesLoaded] = useState(false);
+  const [activeStageIndex, setActiveStageIndex] = useState(0);
+  const [scrollProgressPercent, setScrollProgressPercent] = useState(0);
   const imagesRef = useRef([]);
+  const animFrameIdRef = useRef(null);
+  const currentFrameRef = useRef(-1);
   const TOTAL_FRAMES = 299;
 
+  // Preload 299 frames & store fallback loaded states
   useEffect(() => {
-    let loadedCount = 0;
     const loadedImages = [];
-
     for (let i = 1; i <= TOTAL_FRAMES; i++) {
       const img = new Image();
       const frameNum = String(i).padStart(3, '0');
-      img.src = `/public/images/herosection/ezgif-frame-${frameNum}.jpg`;
+      img.src = `public/images/herosection/ezgif-frame-${frameNum}.jpg`;
       img.onload = () => {
-        loadedCount++;
-        if (loadedCount === TOTAL_FRAMES) {
-          setImagesLoaded(true);
+        img.isLoaded = true;
+        if (i === 1 && canvasRef.current) {
+          renderCanvasFrame(0);
         }
       };
       loadedImages.push(img);
@@ -103,72 +104,98 @@ function HeroScrollCanvas({ t, isRtl }) {
     imagesRef.current = loadedImages;
   }, []);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!containerRef.current) return;
-      const rect = containerRef.current.getBoundingClientRect();
-      const windowHeight = window.innerHeight;
-      const totalScrollableHeight = rect.height - windowHeight;
-      if (totalScrollableHeight <= 0) return;
-
-      const currentScroll = Math.max(0, -rect.top);
-      const progress = Math.min(1, Math.max(0, currentScroll / totalScrollableHeight));
-      setScrollProgress(progress);
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  useEffect(() => {
-    if (!canvasRef.current || imagesRef.current.length === 0) return;
+  // Fast High-DPI 60FPS Canvas Render Function with Nearest Loaded Frame Fallback
+  const renderCanvasFrame = (frameIdx) => {
     const canvas = canvasRef.current;
+    if (!canvas) return;
     const ctx = canvas.getContext('2d');
+    const images = imagesRef.current;
+    if (!images || images.length === 0) return;
 
-    const frameIndex = Math.min(
-      TOTAL_FRAMES - 1,
-      Math.max(0, Math.floor(scrollProgress * (TOTAL_FRAMES - 1)))
-    );
+    let targetImg = images[frameIdx];
+    if (!targetImg || !targetImg.isLoaded) {
+      // Find nearest loaded frame so canvas NEVER goes black or stutters
+      for (let delta = 1; delta < TOTAL_FRAMES; delta++) {
+        const prev = images[frameIdx - delta];
+        if (prev && prev.isLoaded) { targetImg = prev; break; }
+        const next = images[frameIdx + delta];
+        if (next && next.isLoaded) { targetImg = next; break; }
+      }
+    }
 
-    const img = imagesRef.current[frameIndex];
-    if (img && img.complete) {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      const displayWidth = window.innerWidth;
-      const displayHeight = window.innerHeight;
+    if (!targetImg || !targetImg.complete) return;
 
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const displayWidth = window.innerWidth;
+    const displayHeight = window.innerHeight;
+
+    if (canvas.width !== displayWidth * dpr || canvas.height !== displayHeight * dpr) {
       canvas.width = displayWidth * dpr;
       canvas.height = displayHeight * dpr;
-
-      ctx.scale(dpr, dpr);
-      ctx.imageSmoothingEnabled = true;
-      ctx.imageSmoothingQuality = 'high';
-
-      const hRatio = displayWidth / img.width;
-      const vRatio = displayHeight / img.height;
-      const ratio = Math.max(hRatio, vRatio);
-      const centerShift_x = (displayWidth - img.width * ratio) / 2;
-      const centerShift_y = (displayHeight - img.height * ratio) / 2;
-
-      ctx.clearRect(0, 0, displayWidth, displayHeight);
-      ctx.drawImage(
-        img,
-        0,
-        0,
-        img.width,
-        img.height,
-        centerShift_x,
-        centerShift_y,
-        img.width * ratio,
-        img.height * ratio
-      );
     }
-  }, [scrollProgress, imagesLoaded]);
 
-  const activeStage = 
-    scrollProgress < 0.22 ? 0 :
-    scrollProgress < 0.48 ? 1 :
-    scrollProgress < 0.75 ? 2 : 3;
+    ctx.save();
+    ctx.scale(dpr, dpr);
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
+
+    const hRatio = displayWidth / targetImg.width;
+    const vRatio = displayHeight / targetImg.height;
+    const ratio = Math.max(hRatio, vRatio);
+    const centerShift_x = (displayWidth - targetImg.width * ratio) / 2;
+    const centerShift_y = (displayHeight - targetImg.height * ratio) / 2;
+
+    ctx.clearRect(0, 0, displayWidth, displayHeight);
+    ctx.drawImage(
+      targetImg,
+      0,
+      0,
+      targetImg.width,
+      targetImg.height,
+      centerShift_x,
+      centerShift_y,
+      targetImg.width * ratio,
+      targetImg.height * ratio
+    );
+    ctx.restore();
+  };
+
+  // Continuous 60FPS Scroll Animation Loop
+  useEffect(() => {
+    const updateLoop = () => {
+      if (containerRef.current) {
+        const rect = containerRef.current.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+        const totalScrollableHeight = rect.height - windowHeight;
+
+        if (totalScrollableHeight > 0) {
+          const currentScroll = Math.max(0, -rect.top);
+          const progress = Math.min(1, Math.max(0, currentScroll / totalScrollableHeight));
+          const targetFrameIndex = Math.min(
+            TOTAL_FRAMES - 1,
+            Math.max(0, Math.floor(progress * (TOTAL_FRAMES - 1)))
+          );
+
+          if (currentFrameRef.current !== targetFrameIndex) {
+            currentFrameRef.current = targetFrameIndex;
+            renderCanvasFrame(targetFrameIndex);
+            setScrollProgressPercent(Math.round(progress * 100));
+          }
+
+          const stage = 
+            progress < 0.22 ? 0 :
+            progress < 0.48 ? 1 :
+            progress < 0.75 ? 2 : 3;
+
+          setActiveStageIndex((prev) => (prev !== stage ? stage : prev));
+        }
+      }
+      animFrameIdRef.current = requestAnimationFrame(updateLoop);
+    };
+
+    animFrameIdRef.current = requestAnimationFrame(updateLoop);
+    return () => cancelAnimationFrame(animFrameIdRef.current);
+  }, []);
 
   return e('div', { ref: containerRef, className: "relative h-[340vh] sm:h-[360vh] bg-black" },
     e('div', { className: "sticky top-0 h-screen w-full overflow-hidden flex items-end justify-center pb-6 sm:pb-12" },
@@ -176,18 +203,18 @@ function HeroScrollCanvas({ t, isRtl }) {
       e('div', { className: "absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 to-black/40 pointer-events-none z-10" }),
       e('div', { className: "absolute top-16 sm:top-20 left-0 right-0 h-1 sm:h-1.5 bg-white/10 z-30" },
         e('div', { 
-          className: "h-full bg-gradient-to-r from-[#D4AF37] via-[#F7E7A9] to-[#D4AF37] transition-all duration-150",
-          style: { width: `${scrollProgress * 100}%` }
+          className: "h-full bg-gradient-to-r from-[#D4AF37] via-[#F7E7A9] to-[#D4AF37] transition-all duration-75",
+          style: { width: `${scrollProgressPercent}%` }
         })
       ),
       e('div', { className: "relative z-20 max-w-4xl mx-auto px-4 w-full text-center" },
         e(AnimatePresence, { mode: "wait" },
-          activeStage === 0 && e(motion.div, {
+          activeStageIndex === 0 && e(motion.div, {
             key: "stage0",
             initial: { opacity: 0, y: 20 },
             animate: { opacity: 1, y: 0 },
             exit: { opacity: 0, y: -20 },
-            transition: { duration: 0.4 },
+            transition: { duration: 0.35 },
             className: "bg-[#0F2A23]/90 backdrop-blur-md p-5 sm:p-10 rounded-2xl sm:rounded-3xl border-2 border-[#D4AF37] shadow-2xl text-white space-y-3 sm:space-y-4"
           },
             e('div', { className: "inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-[#D4AF37] bg-[#D4AF37]/20" },
@@ -206,12 +233,12 @@ function HeroScrollCanvas({ t, isRtl }) {
             )
           ),
 
-          activeStage === 1 && e(motion.div, {
+          activeStageIndex === 1 && e(motion.div, {
             key: "stage1",
             initial: { opacity: 0, scale: 0.95, y: 20 },
             animate: { opacity: 1, scale: 1, y: 0 },
             exit: { opacity: 0, scale: 0.95, y: -20 },
-            transition: { duration: 0.4 },
+            transition: { duration: 0.35 },
             className: "max-w-xl mx-auto bg-[#0F2A23]/95 backdrop-blur-md p-5 sm:p-8 rounded-2xl sm:rounded-3xl border-2 border-[#D4AF37] shadow-2xl text-white text-start space-y-2 sm:space-y-3"
           },
             e('div', { className: "inline-block px-3 py-1 rounded-full bg-[#D4AF37] text-[#0F2A23] text-[10px] sm:text-xs font-bold uppercase tracking-wider" }, t.hero.features[0].tag),
@@ -219,12 +246,12 @@ function HeroScrollCanvas({ t, isRtl }) {
             e('p', { className: "text-xs sm:text-sm text-gray-200 leading-relaxed" }, t.hero.features[0].desc)
           ),
 
-          activeStage === 2 && e(motion.div, {
+          activeStageIndex === 2 && e(motion.div, {
             key: "stage2",
             initial: { opacity: 0, scale: 0.95, y: 20 },
             animate: { opacity: 1, scale: 1, y: 0 },
             exit: { opacity: 0, scale: 0.95, y: -20 },
-            transition: { duration: 0.4 },
+            transition: { duration: 0.35 },
             className: "max-w-xl mx-auto bg-[#0F2A23]/95 backdrop-blur-md p-5 sm:p-8 rounded-2xl sm:rounded-3xl border-2 border-[#D4AF37] shadow-2xl text-white text-start space-y-2 sm:space-y-3"
           },
             e('div', { className: "inline-block px-3 py-1 rounded-full bg-[#D4AF37] text-[#0F2A23] text-[10px] sm:text-xs font-bold uppercase tracking-wider" }, t.hero.features[1].tag),
@@ -232,12 +259,12 @@ function HeroScrollCanvas({ t, isRtl }) {
             e('p', { className: "text-xs sm:text-sm text-gray-200 leading-relaxed" }, t.hero.features[1].desc)
           ),
 
-          activeStage === 3 && e(motion.div, {
+          activeStageIndex === 3 && e(motion.div, {
             key: "stage3",
             initial: { opacity: 0, scale: 0.95, y: 20 },
             animate: { opacity: 1, scale: 1, y: 0 },
             exit: { opacity: 0, scale: 0.95, y: -20 },
-            transition: { duration: 0.4 },
+            transition: { duration: 0.35 },
             className: "max-w-2xl mx-auto bg-[#0F2A23]/95 backdrop-blur-md p-5 sm:p-8 rounded-2xl sm:rounded-3xl border-2 border-[#D4AF37] shadow-2xl text-white space-y-3 sm:space-y-4"
           },
             e('div', { className: "inline-block px-3 py-1 rounded-full bg-[#D4AF37] text-[#0F2A23] text-[10px] sm:text-xs font-bold uppercase tracking-wider" }, t.hero.features[2].tag),
